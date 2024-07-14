@@ -13,5 +13,7 @@ namespace ADTest.Models
 
         public string status { get; set; }
 
+
+
     }
 }

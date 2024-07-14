@@ -7,10 +7,11 @@ namespace ADTest.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [Key]
+        [StringLength(12)]
+        public string Id { get; set; }
+        public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
         public string PhoneNumber { get; set; }
-        public Student student { get; set; }
-        public Lecturer lecturer { get; set; }
-
     }
 }

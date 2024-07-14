@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ADTest.Migrations
 {
     /// <inheritdoc />
-    public partial class usertb : Migration
+    public partial class CreateDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,17 +31,10 @@ namespace ADTest.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    LecturerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    lecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StudentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Student_LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Student_ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    studentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -59,21 +52,20 @@ namespace ADTest.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_Student_LecturerId",
-                        column: x => x.Student_LecturerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_lecturerId",
-                        column: x => x.lecturerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_studentId",
-                        column: x => x.studentId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "lecturer",
+                columns: table => new
+                {
+                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LecturerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LecturerAddress = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_lecturer", x => x.LecturerId);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,7 +95,7 @@ namespace ADTest.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(12)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -122,10 +114,10 @@ namespace ADTest.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(12)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,7 +134,7 @@ namespace ADTest.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(12)", nullable: false),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -166,9 +158,9 @@ namespace ADTest.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(12)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -182,14 +174,54 @@ namespace ADTest.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "proposal",
+                columns: table => new
+                {
+                    ProposalId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_proposal", x => x.ProposalId);
+                    table.ForeignKey(
+                        name: "FK_proposal_lecturer_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "lecturer",
+                        principalColumn: "LecturerId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "student",
+                columns: table => new
+                {
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_student", x => x.StudentId);
+                    table.ForeignKey(
+                        name: "FK_student_lecturer_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "lecturer",
+                        principalColumn: "LecturerId");
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "17482271-b88a-4e21-881d-9d3bd7d459fb", null, "Student", "Student" },
-                    { "465eee4d-4e9b-4ae0-87c2-75eac4a9bcaf", null, "Admin", "Admin" },
-                    { "4ec8afb2-acb7-4690-963c-286eb1043cfb", null, "Lecturer", "Lecturer" }
+                    { "44b808b2-b2c7-44d0-ab69-b6a073e175bf", null, "Admin", "Admin" },
+                    { "9524adf0-61e4-44cd-b5b2-bbeb2dd3203e", null, "Student", "Student" },
+                    { "b7af2ffd-4973-4e97-8d3b-11ed2535a916", null, "Lecturer", "Lecturer" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -225,28 +257,21 @@ namespace ADTest.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_lecturerId",
-                table: "AspNetUsers",
-                column: "lecturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Student_LecturerId",
-                table: "AspNetUsers",
-                column: "Student_LecturerId",
-                unique: true,
-                filter: "[LecturerId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_studentId",
-                table: "AspNetUsers",
-                column: "studentId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_proposal_LecturerId",
+                table: "proposal",
+                column: "LecturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_student_LecturerId",
+                table: "student",
+                column: "LecturerId");
         }
 
         /// <inheritdoc />
@@ -268,10 +293,19 @@ namespace ADTest.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "proposal");
+
+            migrationBuilder.DropTable(
+                name: "student");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "lecturer");
         }
     }
 }

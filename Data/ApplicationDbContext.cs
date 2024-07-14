@@ -8,10 +8,10 @@ namespace ADTest.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Student> students { get; set; }
-        public DbSet<Lecturer> Lecturers { get; set; }
+        public DbSet<Student> student { get; set; }
+        public DbSet<Lecturer> lecturer { get; set; }
 
-        public DbSet<Proposal> proposals { get; set; }
+        public DbSet<Proposal> proposal { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

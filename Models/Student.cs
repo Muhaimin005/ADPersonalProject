@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ADTest.Models
 {
-    public class Student : ApplicationUser
+    public class Student
     {
         public string StudentId { get; set; }
 

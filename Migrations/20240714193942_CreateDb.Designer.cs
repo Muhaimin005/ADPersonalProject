@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240714151805_tbuser")]
-    partial class tbuser
+    [Migration("20240714193942_CreateDb")]
+    partial class CreateDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,36 @@ namespace ADTest.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ADTest.Models.Proposal", b =>
+                {
+                    b.Property<int>("ProposalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProposalId"));
+
+                    b.Property<string>("LecturerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProposalId");
+
+                    b.HasIndex("LecturerId");
+
+                    b.ToTable("proposal");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -132,19 +162,19 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8b3ed7f0-f459-4d45-ba82-b45bc1923f18",
+                            Id = "74cb00eb-7d5f-4b35-aa30-5c7d95983e72",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "19d08dc5-0d94-46eb-ae65-112d035a8dbc",
+                            Id = "601298f4-db36-4c44-b1c6-e2124e35eb99",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "25cc6540-053f-4bdf-a605-5edad8bed212",
+                            Id = "75243a4a-9e96-4216-a1b7-6e99fc0145be",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         });
@@ -203,10 +233,12 @@ namespace ADTest.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -243,10 +275,12 @@ namespace ADTest.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -276,11 +310,6 @@ namespace ADTest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("lecturerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasIndex("lecturerId");
-
                     b.HasDiscriminator().HasValue("Lecturer");
                 });
 
@@ -303,14 +332,7 @@ namespace ADTest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("studentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasIndex("LecturerId")
-                        .IsUnique()
-                        .HasFilter("[LecturerId] IS NOT NULL");
-
-                    b.HasIndex("studentId");
+                    b.HasIndex("LecturerId");
 
                     b.ToTable("AspNetUsers", t =>
                         {
@@ -322,6 +344,15 @@ namespace ADTest.Migrations
                         });
 
                     b.HasDiscriminator().HasValue("Student");
+                });
+
+            modelBuilder.Entity("ADTest.Models.Proposal", b =>
+                {
+                    b.HasOne("ADTest.Models.Lecturer", "lecturer")
+                        .WithMany()
+                        .HasForeignKey("LecturerId");
+
+                    b.Navigation("lecturer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -375,34 +406,13 @@ namespace ADTest.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ADTest.Models.Lecturer", b =>
-                {
-                    b.HasOne("ADTest.Models.Lecturer", "lecturer")
-                        .WithMany()
-                        .HasForeignKey("lecturerId");
-
-                    b.Navigation("lecturer");
-                });
-
             modelBuilder.Entity("ADTest.Models.Student", b =>
                 {
                     b.HasOne("ADTest.Models.Lecturer", "lecturer")
-                        .WithOne("student")
-                        .HasForeignKey("ADTest.Models.Student", "LecturerId");
-
-                    b.HasOne("ADTest.Models.Student", "student")
                         .WithMany()
-                        .HasForeignKey("studentId");
+                        .HasForeignKey("LecturerId");
 
                     b.Navigation("lecturer");
-
-                    b.Navigation("student");
-                });
-
-            modelBuilder.Entity("ADTest.Models.Lecturer", b =>
-                {
-                    b.Navigation("student")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

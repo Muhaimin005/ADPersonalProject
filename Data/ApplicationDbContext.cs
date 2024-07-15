@@ -13,6 +13,8 @@ namespace ADTest.Data
 
         public DbSet<Proposal> proposal { get; set; }
 
+        public DbSet<ADTest.Models.AcademicProgram> AcademicProgram { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -33,7 +35,7 @@ namespace ADTest.Data
 
             builder.Entity<IdentityRole>().HasData(Admin, Student, Lecturer);
         }
-        public DbSet<ADTest.Models.AcademicProgram> AcademicProgram { get; set; } = default!;
+       
 
     }
 }

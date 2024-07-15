@@ -33,6 +33,7 @@ namespace ADTest.Data
 
             builder.Entity<IdentityRole>().HasData(Admin, Student, Lecturer);
         }
+        public DbSet<ADTest.Models.AcademicProgram> AcademicProgram { get; set; } = default!;
 
     }
 }

@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ADTest.Data;
-using ADTest.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using ADTest.Data;
+using ADTest.Models;
 
 namespace ADTest.Controllers
 {
@@ -73,8 +73,8 @@ namespace ADTest.Controllers
             [Required]
             [Display(Name = "Domain")]
             public string Domain { get; set; }
-
         }
+
         // GET: Lecturers
         [Route("Index")]
         public async Task<IActionResult> Index()
@@ -109,14 +109,11 @@ namespace ADTest.Controllers
         }
 
         // POST: Lecturers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Create")]
         public async Task<IActionResult> Create(InputModel Input)
         {
-            
-            
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -124,7 +121,7 @@ namespace ADTest.Controllers
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
-                    PhoneNumber = Input.PhoneNumber, // Input.Phone should be string
+                    PhoneNumber = Input.PhoneNumber,
                     CreatedAt = DateTime.Now,
                 };
 
@@ -157,6 +154,9 @@ namespace ADTest.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
+            // If we got this far, something failed, redisplay form
+            ViewData["ProgramId"] = new SelectList(_context.AcademicProgram, "ProgramId", "ProgramName", Input.ProgramId);
             return View(Input);
         }
 
@@ -177,8 +177,6 @@ namespace ADTest.Controllers
         }
 
         // POST: Lecturers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("LecturerId,LecturerName,ApplicationUserId,LecturerAddress,ProgramId,FieldofStudy,domain")] Lecturer lecturer)

@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Name" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                <input asp-for="Name" class="form-control" autocomplete="" aria-required="true" placeholder="Name" />
                 <label asp-for="Name">Name</label>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="PhoneNumber" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                <input asp-for="PhoneNumber" class="form-control" autocomplete="" aria-required="true" placeholder="Phone Number" />
                 <label asp-for="PhoneNumber">Phone Number</label>
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
@@ -27,32 +27,42 @@
                 <label asp-for="Email">Email</label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LecturerID" class="control-label"></label>
-                <input asp-for="LecturerID" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="LecturerID" class="form-control" autocomplete="" aria-required="true" placeholder="Lecturer ID" />
+                <label asp-for="LecturerID">Lecturer ID</label>
                 <span asp-validation-for="LecturerID" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LecturerAddress" class="control-label"></label>
-                <input asp-for="LecturerAddress" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="LecturerAddress" class="form-control" autocomplete="" aria-required="true" placeholder="Lecturer Address" />
+                <label asp-for="LecturerAddress">Lecturer Address</label>
                 <span asp-validation-for="LecturerAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProgramId" class="control-label"></label>
-                <input asp-for="ProgramId" class="form-control" />
+                <select asp-for="ProgramId" class="form-control" asp-items="@(ViewData["ProgramId"] as SelectList)"></select>
                 <span asp-validation-for="ProgramId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FieldofStudy" class="control-label"></label>
-                <input asp-for="FieldofStudy" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="FieldofStudy" class="form-control" autocomplete="" aria-required="true" placeholder="Field of Study" />
+                <label asp-for="FieldofStudy">Field of Study</label>
                 <span asp-validation-for="FieldofStudy" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Domain" class="control-label"></label>
-                <input asp-for="Domain" class="form-control" />
-                <span asp-validation-for="Domain" class="text-danger" asp-items="ViewBag.ProgramId"></span>
+            <div class="form-floating mb-3">
+                <input asp-for="Domain" class="form-control" autocomplete="" aria-required="true" placeholder="Domain" />
+                <label asp-for="Domain">Domain</label>
+                <span asp-validation-for="Domain" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Password">Password</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             <div class="form-group">
+
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -64,5 +74,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

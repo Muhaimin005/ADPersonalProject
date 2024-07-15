@@ -34,8 +34,6 @@ namespace ADTest.Data
             Lecturer.NormalizedName = "Lecturer";
 
             builder.Entity<IdentityRole>().HasData(Admin, Student, Lecturer);
-        }
-       
-
+        }    
     }
 }

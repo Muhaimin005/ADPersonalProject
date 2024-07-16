@@ -1,4 +1,4 @@
-﻿@model ADTest.Models.Lecturer
+﻿@model ADTest.Models.ViewModel.LecturerViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -17,10 +17,22 @@
             @Html.DisplayFor(model => model.LecturerName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplicationUserId)
+            @Html.DisplayNameFor(model => model.lecturerId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUserId)
+            @Html.DisplayFor(model => model.lecturerId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.LecturerAddress)
@@ -29,26 +41,20 @@
             @Html.DisplayFor(model => model.LecturerAddress)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProgramId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProgramId)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FieldofStudy)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FieldofStudy)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.domain)
+            @Html.DisplayNameFor(model => model.Domain)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.domain)
+            @Html.DisplayFor(model => model.Domain)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.LecturerId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.lecturerId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

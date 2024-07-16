@@ -5,12 +5,26 @@
 <body>
     <div class="container">
         <div class="main-content">
-            @if (User.IsInRole("Admin") || User.IsInRole("Parent") || User.IsInRole("Therapist") || User.IsInRole("CustomerService"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Lecturer") || User.IsInRole("Student"))
             {
                 @if (User.IsInRole("Admin"))
                 {
                     <div class="text-center">
                         <h1 class="display-4">Welcome admin</h1>
+                        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                    </div>
+                }
+                else if (User.IsInRole("Lecturer"))
+                {
+                    <div class="text-center">
+                        <h1 class="display-4">Welcome Lecturer</h1>
+                        <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                    </div>
+                }
+                else if (User.IsInRole("Student"))
+                {
+                    <div class="text-center">
+                        <h1 class="display-4">Welcome Student</h1>
                         <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
                     </div>
                 }

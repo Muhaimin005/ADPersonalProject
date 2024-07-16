@@ -1,4 +1,4 @@
-﻿@model ADTest.Models.Lecturer
+﻿@model ADTest.Models.ViewModel.LecturerViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,36 +12,37 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="LecturerId" />
-            <div class="form-group">
-                <label asp-for="LecturerName" class="control-label"></label>
-                <input asp-for="LecturerName" class="form-control" />
+            <input type="hidden" asp-for="lecturerId" />
+
+            <div class="form-floating mb-3">
+                <input asp-for="LecturerName" class="form-control" autocomplete="" aria-required="true" placeholder="Name" />
+                <label asp-for="LecturerName">Name</label>
                 <span asp-validation-for="LecturerName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <input asp-for="ApplicationUserId" class="form-control" />
-                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+            <div class="form-floating mb-3">
+                <input asp-for="PhoneNumber" class="form-control" autocomplete="" aria-required="true" placeholder="Phone Number" />
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LecturerAddress" class="control-label"></label>
-                <input asp-for="LecturerAddress" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="email">Email</label>
+                <span asp-validation-for="email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="LecturerAddress" class="form-control" autocomplete="" aria-required="true" placeholder="Lecturer Address" />
+                <label asp-for="LecturerAddress">Lecturer Address</label>
                 <span asp-validation-for="LecturerAddress" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ProgramId" class="control-label"></label>
-                <input asp-for="ProgramId" class="form-control" />
-                <span asp-validation-for="ProgramId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FieldofStudy" class="control-label"></label>
-                <input asp-for="FieldofStudy" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="FieldofStudy" class="form-control" autocomplete="" aria-required="true" placeholder="Field of Study" />
+                <label asp-for="FieldofStudy">Field of Study</label>
                 <span asp-validation-for="FieldofStudy" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="domain" class="control-label"></label>
-                <input asp-for="domain" class="form-control" />
-                <span asp-validation-for="domain" class="text-danger"></span>
+            <div class="form-floating mb-3">
+                <input asp-for="Domain" class="form-control" autocomplete="" aria-required="true" placeholder="Field of Study" />
+                <label asp-for="Domain">Domain</label>
+                <span asp-validation-for="Domain" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

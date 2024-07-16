@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using ADTest.Data;
 using ADTest.Models;
+using ADTest.Models.ViewModel;
 
 namespace ADTest.Controllers
 {
@@ -69,42 +70,63 @@ namespace ADTest.Controllers
             [Required]
             [Display(Name = "Fieldofstudy")]
             public string FieldofStudy { get; set; }
-
-            [Required]
-            [Display(Name = "Domain")]
-            public string Domain { get; set; }
         }
 
         // GET: Lecturers
         [Route("Index")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.lecturer.ToListAsync());
-        }
+            var lecturer = await _context.lecturer.Include(t => t.ApplicationUser).ToListAsync(); 
 
-        // GET: Lecturers/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var lecturer = await _context.lecturer
-                .FirstOrDefaultAsync(m => m.LecturerId == id);
             if (lecturer == null)
             {
                 return NotFound();
             }
 
-            return View(lecturer);
+            var model = lecturer.Select(t=> new LecturerViewModel 
+            {
+                lecturerId = t.LecturerId,
+                LecturerName = t.ApplicationUser.Name,
+                email = t.ApplicationUser.Email,
+                PhoneNumber = t.ApplicationUser.PhoneNumber,
+                LecturerAddress = t.LecturerAddress,
+                FieldofStudy = t.FieldofStudy,
+                Domain = t.domain
+
+            }).ToList();
+
+            return View(model);
+        }
+
+        // GET: Lecturers/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            var lecturer = await _context.lecturer.Include(t => t.ApplicationUser).FirstOrDefaultAsync(t => t.LecturerId == id);
+
+            if (lecturer == null)
+            {
+                return NotFound();
+            }
+
+            var model = new LecturerViewModel
+            {
+                lecturerId = lecturer.LecturerId,
+                LecturerName = lecturer.ApplicationUser.Name,
+                email = lecturer.ApplicationUser.Email,
+                PhoneNumber = lecturer.ApplicationUser.PhoneNumber,
+                LecturerAddress = lecturer.LecturerAddress,
+                FieldofStudy = lecturer.FieldofStudy,
+                Domain = lecturer.domain
+
+            };
+
+            return View(model);
         }
 
         // GET: Lecturers/Create
         [Route("Create")]
         public IActionResult Create()
         {
-            ViewData["ProgramId"] = new SelectList(_context.AcademicProgram, "ProgramId", "ProgramName");
             return View();
         }
 
@@ -140,8 +162,7 @@ namespace ADTest.Controllers
                         LecturerAddress = Input.LecturerAddress,
                         ApplicationUserId = user.Id,
                         FieldofStudy = Input.FieldofStudy,
-                        domain = Input.Domain,
-                        ProgramId = Input.ProgramId
+                        domain = "Pending",
                     };
 
                     _context.lecturer.Add(lecturer);
@@ -156,78 +177,94 @@ namespace ADTest.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["ProgramId"] = new SelectList(_context.AcademicProgram, "ProgramId", "ProgramName", Input.ProgramId);
             return View(Input);
         }
 
         // GET: Lecturers/Edit/5
+        [Route("Edit")]
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var lecturer = await _context.lecturer.Include(t=>t.ApplicationUser).FirstOrDefaultAsync(t=>t.LecturerId == id);
 
-            var lecturer = await _context.lecturer.FindAsync(id);
             if (lecturer == null)
             {
                 return NotFound();
             }
-            return View(lecturer);
+
+            var model = new LecturerViewModel
+            {
+                lecturerId = lecturer.LecturerId,
+                LecturerName = lecturer.ApplicationUser.Name,
+                email = lecturer.ApplicationUser.Email,
+                PhoneNumber = lecturer.ApplicationUser.PhoneNumber,
+                LecturerAddress = lecturer.LecturerAddress,
+                FieldofStudy = lecturer.FieldofStudy,
+                Domain=lecturer.domain
+
+            };
+
+            return View(model);
         }
 
         // POST: Lecturers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("LecturerId,LecturerName,ApplicationUserId,LecturerAddress,ProgramId,FieldofStudy,domain")] Lecturer lecturer)
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(LecturerViewModel model)
         {
-            if (id != lecturer.LecturerId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var lecturer = await _context.lecturer.Include(t => t.ApplicationUser).FirstOrDefaultAsync(t => t.LecturerId == model.lecturerId);
+
+                if (lecturer == null)
                 {
-                    _context.Update(lecturer);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LecturerExists(lecturer.LecturerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                lecturer.ApplicationUser.Email = model.email;
+                lecturer.ApplicationUser.PhoneNumber = model.PhoneNumber;
+                lecturer.ApplicationUser.Name = model.LecturerName;
+                lecturer.LecturerName = model.LecturerName;
+                lecturer.LecturerAddress = model.LecturerAddress;
+                lecturer.FieldofStudy = model.FieldofStudy;
+                lecturer.domain = model.Domain;                
+                
+                _context.Update(lecturer);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(lecturer);
+            return View(model);
         }
 
         // GET: Lecturers/Delete/5
+        [Route("Delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var lecturer = await _context.lecturer.Include(t => t.ApplicationUser).FirstOrDefaultAsync(t => t.LecturerId == id);
 
-            var lecturer = await _context.lecturer
-                .FirstOrDefaultAsync(m => m.LecturerId == id);
             if (lecturer == null)
             {
                 return NotFound();
             }
 
-            return View(lecturer);
+            var model = new LecturerViewModel
+            {
+                lecturerId = lecturer.LecturerId,
+                LecturerName = lecturer.ApplicationUser.Name,
+                email = lecturer.ApplicationUser.Email,
+                PhoneNumber = lecturer.ApplicationUser.PhoneNumber,
+                LecturerAddress = lecturer.LecturerAddress,
+                FieldofStudy = lecturer.FieldofStudy,
+                Domain = lecturer.domain
+
+            };
+
+            return View(model);
         }
 
         // POST: Lecturers/Delete/5
+        [Route("Delete")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)

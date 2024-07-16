@@ -1,0 +1,59 @@
+﻿@model List<Lecturer>
+
+@{
+    ViewData["Title"] = "Assign Domain";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>
+				Lecturer ID
+			</th>
+			<th>
+				Lecturer Name
+			</th>
+			<th>
+				Action
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var obj in Model)
+		{
+			<tr>
+				<td>
+					@obj.LecturerId
+				</td>
+				<td>
+					@obj.LecturerName
+				</td>
+				<td>
+					<select asp-for="@obj.domain" class="form-control" onchange="updateDomain(this.value, @obj.LecturerId)">
+						<option value="null">None</option>
+						<option value="Research">Research</option>
+						<option value="Development">Development</option>
+					</select>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<script>
+	function updateDomain(selectedStatus, lecturerId) {
+		$.ajax({
+			type: 'POST',
+			url: '/Committee/UpdateDomain', // Adjust the route
+			data: { status: selectedStatus, lecturerId: lecturerId },
+			success: function (result) {
+				// Handle success (e.g., show a message)
+			},
+			error: function () {
+				// Handle error (e.g., display an error message)
+			}
+		});
+	}
+</script>

@@ -267,16 +267,41 @@ namespace ADTest.Controllers
         [Route("Delete")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(LecturerViewModel model)
         {
-            var lecturer = await _context.lecturer.FindAsync(id);
+            var lecturer = await _context.lecturer.Include(t => t.ApplicationUser).FirstOrDefaultAsync(t => t.LecturerId == model.lecturerId);
             if (lecturer != null)
             {
-                _context.lecturer.Remove(lecturer);
+
+                if (lecturer == null)
+                {
+                    return NotFound();
+                }
+                else 
+                {
+                    var user = await _userManager.FindByIdAsync(lecturer.ApplicationUser.Id);
+
+                    lecturer.ApplicationUser.Email = model.email;
+                    lecturer.ApplicationUser.PhoneNumber = model.PhoneNumber;
+                    lecturer.ApplicationUser.Name = model.LecturerName;
+                    lecturer.LecturerName = model.LecturerName;
+                    lecturer.LecturerAddress = model.LecturerAddress;
+                    lecturer.FieldofStudy = model.FieldofStudy;
+                    lecturer.domain = model.Domain;
+
+                    _context.lecturer.Remove(lecturer);
+
+                    var result = await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }           
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //await _context.SaveChangesAsync();
+            return View();
         }
 
         private bool LecturerExists(string id)

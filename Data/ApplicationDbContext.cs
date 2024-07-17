@@ -15,6 +15,8 @@ namespace ADTest.Data
 
         public DbSet<ADTest.Models.AcademicProgram> AcademicProgram { get; set; }
 
+        public DbSet<Committee> committee { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -33,7 +35,10 @@ namespace ADTest.Data
             var Lecturer = new IdentityRole("Lecturer");
             Lecturer.NormalizedName = "Lecturer";
 
-            builder.Entity<IdentityRole>().HasData(Admin, Student, Lecturer);
+            var Committee = new IdentityRole("Committee");
+            Committee.NormalizedName = "Committee";
+
+            builder.Entity<IdentityRole>().HasData(Admin, Student, Lecturer, Committee);
         }    
     }
 }

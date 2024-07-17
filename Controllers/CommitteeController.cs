@@ -34,15 +34,16 @@ namespace ADTest.Controllers
             _context = context;
         }
 
+        // COMMITTEE SIDE - START //
         public async Task<IActionResult>AssignDomain()
         {
-            List<Lecturer> lecturerList = new List<Lecturer>();
+            List<Lecturer> lecturerList = _context.lecturer.ToList();
             return View(lecturerList);
         }
 		public IActionResult UpdateDomain(string status, string lecturerId)
 		{
 			// Retrieve the billing record based on billingId
-			var lecturer = _context.lecturer.FirstOrDefault(l => l.LecturerId == lecturerId);
+			var lecturer = _context.lecturer.Find(lecturerId);
 			if (lecturer != null)
 			{
 				lecturer.domain = status;
@@ -53,8 +54,9 @@ namespace ADTest.Controllers
 			// Handle error (return JSON or appropriate response)
 			return Json(new { success = false });
 		}
+        // COMMITTEE SIDE - END //
 
-        // ADMIN SIDE _ START //
+        // ADMIN SIDE - START //
         public IActionResult CreateCommittee()
         {
             ViewData["ProgramId"] = new SelectList(_context.AcademicProgram, "ProgramId", "ProgramName");
@@ -181,7 +183,7 @@ namespace ADTest.Controllers
             ViewData["Programs"] = new SelectList(await _context.AcademicProgram.ToListAsync(), "ProgramId", "ProgramName", model.ProgramId);
             return View(model);
         }
-        // ADMIN SIDE _ END //
+        // ADMIN SIDE - END //
 
     }
 }

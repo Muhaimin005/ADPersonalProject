@@ -31,8 +31,8 @@
 					@obj.LecturerName
 				</td>
 				<td>
-					<select asp-for="@obj.domain" class="form-control" onchange="updateDomain(this.value, @obj.LecturerId)">
-						<option value="null">None</option>
+					<select asp-for="@obj.domain" class="form-control" onchange="updateDomain(this.value, '@obj.LecturerId')">
+						<option value="Pending">Pending</option>
 						<option value="Research">Research</option>
 						<option value="Development">Development</option>
 					</select>

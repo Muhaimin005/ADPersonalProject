@@ -64,10 +64,6 @@ namespace ADTest.Controllers
             public string LecturerAddress { get; set; }
 
             [Required]
-            [Display(Name = "ProgramId")]
-            public string ProgramId { get; set; }
-
-            [Required]
             [Display(Name = "Fieldofstudy")]
             public string FieldofStudy { get; set; }
         }

@@ -9,6 +9,6 @@
         public string LecturerAddress { get; set; }
         public string FieldofStudy { get; set; }
         public string Domain { get;set; }
-
+        public string IsCommittee { get; set; }
     }
 }

@@ -57,6 +57,7 @@ namespace ADTest.Controllers
             var password = "Abc123?";
             var admin = new ApplicationUser
             {
+                IC = "admin",
                 UserName = adminEmail,
                 Email = adminEmail,
                 Name = "Admin",

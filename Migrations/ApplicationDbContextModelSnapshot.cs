@@ -22,11 +22,24 @@ namespace ADTest.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ADTest.Models.AcademicProgram", b =>
+                {
+                    b.Property<string>("ProgramId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProgramName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProgramId");
+
+                    b.ToTable("AcademicProgram");
+                });
+
             modelBuilder.Entity("ADTest.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -44,6 +57,10 @@ namespace ADTest.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("IC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -96,12 +113,42 @@ namespace ADTest.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ADTest.Models.Committee", b =>
+                {
+                    b.Property<string>("CommitteeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CommitteeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProgramId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CommitteeId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProgramId");
+
+                    b.ToTable("committee");
+                });
+
             modelBuilder.Entity("ADTest.Models.Lecturer", b =>
                 {
                     b.Property<string>("LecturerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FieldofStudy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -113,7 +160,15 @@ namespace ADTest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("domain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("isCommittee")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("LecturerId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("lecturer");
                 });
@@ -200,21 +255,27 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "44b808b2-b2c7-44d0-ab69-b6a073e175bf",
+                            Id = "a87ea4bf-d988-452e-b297-b0e9d2a53259",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "9524adf0-61e4-44cd-b5b2-bbeb2dd3203e",
+                            Id = "d09f9317-ca1d-42bd-9fd7-458dea166099",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "b7af2ffd-4973-4e97-8d3b-11ed2535a916",
+                            Id = "2171c4a8-89ad-49c3-839a-b998615e0939",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
+                        },
+                        new
+                        {
+                            Id = "cd4bdd1d-81d1-46a9-a9aa-c3d6db443217",
+                            Name = "Committee",
+                            NormalizedName = "Committee"
                         });
                 });
 
@@ -259,7 +320,7 @@ namespace ADTest.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -283,7 +344,7 @@ namespace ADTest.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -295,7 +356,7 @@ namespace ADTest.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
@@ -310,7 +371,7 @@ namespace ADTest.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -326,6 +387,36 @@ namespace ADTest.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ADTest.Models.Committee", b =>
+                {
+                    b.HasOne("ADTest.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ADTest.Models.AcademicProgram", "AcademicProgram")
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AcademicProgram");
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ADTest.Models.Lecturer", b =>
+                {
+                    b.HasOne("ADTest.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("ADTest.Models.Proposal", b =>

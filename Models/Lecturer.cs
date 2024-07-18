@@ -20,6 +20,6 @@ namespace ADTest.Models
         public string FieldofStudy { get; set; }
         public string? domain { get; set; }
 
-
+        public string? isCommittee { get; set; }
     }
 }

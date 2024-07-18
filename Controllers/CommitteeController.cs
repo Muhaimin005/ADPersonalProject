@@ -42,7 +42,6 @@ namespace ADTest.Controllers
         }
 		public IActionResult UpdateDomain(string status, string lecturerId)
 		{
-			// Retrieve the billing record based on billingId
 			var lecturer = _context.lecturer.Find(lecturerId);
 			if (lecturer != null)
 			{
@@ -72,6 +71,7 @@ namespace ADTest.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    IC = "dummy",
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,

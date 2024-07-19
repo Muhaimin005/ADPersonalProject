@@ -1,4 +1,4 @@
-﻿@model List<Lecturer>
+﻿@model IEnumerable<ADTest.Models.ViewModel.ComitteeViewModel>
 
 @{
     ViewData["Title"] = "Manage Committee";
@@ -22,26 +22,24 @@
             <th>
                 Program
             </th>
-            <th>
-                Action
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in @Model)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LecturerName)
+                    @Html.DisplayFor(modelItem => item.CommitteeName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LecturerId)
+                    @Html.DisplayFor(modelItem => item.CommitteeId)
                 </td>
                 <td>
+                    @programNames[item.CommitteeId]
                 </td>
                 <td>
-                    <a asp-controller="Lecturers" asp-action="Edit" asp-route-id="@item.LecturerId">Edit</a> |
-                    <a asp-action="AssignNo" asp-route-lecturerId="@item.LecturerId">Unassign</a>
+                    <a asp-action="EditCommittee" asp-route-id="@item.CommitteeId">Edit</a> |
                 </td>
             </tr>
         }

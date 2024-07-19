@@ -118,6 +118,21 @@ namespace ADTest.Controllers
             return View(Input);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var commitee = await _context.committee.FindAsync(id);
+            if (commitee == null)
+            {
+                return NotFound();
+            }
+
+            _context.committee.Remove(commitee);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageCommittee");
+        }
+
         public async Task<IActionResult> ManageCommittee()
         {
             var committee = await _context.committee.Include(t => t.ApplicationUser).Include(t => t.AcademicProgram).ToListAsync();
@@ -225,6 +240,7 @@ namespace ADTest.Controllers
                     ProgramId = null // Initially, no program assigned
                 };
 
+                _context.lecturer.Update(lecturer);
                 _context.committee.Add(committee);
                 await _context.SaveChangesAsync();
             }
@@ -232,23 +248,38 @@ namespace ADTest.Controllers
             return RedirectToAction("AssignCommittee");
         }
 
-
-        public async Task<IActionResult> AssignNo(string lecturerId) // <--- Finish this pass ID and take only specific bill
+        public async Task<IActionResult> AssignNo(string lecturerId)
         {
-            var lecturer = _context.lecturer.Find(lecturerId);
+            var lecturer = await _context.lecturer.FindAsync(lecturerId);
             if (lecturer != null)
             {
+                // Set lecturer's isCommittee to "No"
                 lecturer.isCommittee = "No";
-                _context.SaveChanges();
+                _context.Update(lecturer);
 
+                // Find the committee record associated with this lecturer
+                var committee = await _context.committee.SingleOrDefaultAsync(c => c.ApplicationUserId == lecturer.ApplicationUserId);
+                if (committee != null)
+                {
+                    // Delete the committee record
+                    _context.committee.Remove(committee);
+                }
+
+                // Update user roles
                 var user = await GetUserByLecturerIdAsync(lecturerId);
+                if (user != null)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, "Committee");
+                    await _userManager.AddToRoleAsync(user, "Lecturer");
+                }
 
-                await _userManager.RemoveFromRoleAsync(user, "Committee");
-                await _userManager.AddToRoleAsync(user, "Lecturer");
+                // Save changes to the database
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("AssignCommittee");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AssignProgram(string committeeId, string ProgramId)

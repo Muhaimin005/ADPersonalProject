@@ -34,12 +34,20 @@ namespace ADTest.Controllers
             _context = context;
         }
 
+        // GENERAL FUNCTIONS - START //
+        public async Task<ApplicationUser> GetUserByLecturerIdAsync(string lecturerId)
+        {
+            return await _userManager.Users.SingleOrDefaultAsync(u => u.IC == lecturerId);
+        }
+        // GENERAL FUNCTIONS - END //
+
         // COMMITTEE SIDE - START //
         public async Task<IActionResult>AssignDomain()
         {
             List<Lecturer> lecturerList = _context.lecturer.ToList();
             return View(lecturerList);
         }
+
 		public IActionResult UpdateDomain(string status, string lecturerId)
 		{
 			var lecturer = _context.lecturer.Find(lecturerId);
@@ -182,6 +190,47 @@ namespace ADTest.Controllers
             }
             ViewData["Programs"] = new SelectList(await _context.AcademicProgram.ToListAsync(), "ProgramId", "ProgramName", model.ProgramId);
             return View(model);
+        }
+
+        public IActionResult AssignCommittee() // <--- Finish this pass ID and take only specific bill
+        {
+            List<Lecturer> lecturer = _context.lecturer.ToList();
+
+            return View(lecturer);
+        }
+
+        public async Task<IActionResult> AssignYes(string lecturerId) // <--- Finish this pass ID and take only specific bill
+        {
+            var lecturer = _context.lecturer.Find(lecturerId);
+            if (lecturer != null)
+            {
+                lecturer.isCommittee = "Yes";
+                _context.SaveChanges();
+
+                var user = await GetUserByLecturerIdAsync(lecturerId);
+
+                await _userManager.RemoveFromRoleAsync(user, "Lecturer");
+                await _userManager.AddToRoleAsync(user, "Committee");
+            }
+
+            return RedirectToAction("AssignCommittee");
+        }
+
+        public async Task<IActionResult> AssignNo(string lecturerId) // <--- Finish this pass ID and take only specific bill
+        {
+            var lecturer = _context.lecturer.Find(lecturerId);
+            if (lecturer != null)
+            {
+                lecturer.isCommittee = "No";
+                _context.SaveChanges();
+
+                var user = await GetUserByLecturerIdAsync(lecturerId);
+
+                await _userManager.RemoveFromRoleAsync(user, "Committee");
+                await _userManager.AddToRoleAsync(user, "Lecturer");
+            }
+
+            return RedirectToAction("AssignCommittee");
         }
         // ADMIN SIDE - END //
 

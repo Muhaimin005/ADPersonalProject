@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ADTest.Models.ViewModel.StudentApplicationViewModel>
+
+@{
+    ViewData["Title"] = "Pending Applications";
+}
+
+<h1>Pending Applications</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Student Name
+            </th>
+            <th>
+                Application Status
+            </th>
+            <th>
+                Lecturer Assigned
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturerName)
+                </td>
+                <td>
+                    <form asp-action="ApproveApplication" method="post">
+                        <input type="hidden" name="studentId" value="@item.StudentId" />
+                        <input type="submit" value="Approve" class="btn btn-success" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

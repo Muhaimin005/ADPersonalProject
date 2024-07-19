@@ -299,5 +299,39 @@ namespace ADTest.Controllers
         }
         // ADMIN SIDE - END //
 
+        public async Task<IActionResult> PendingApplications()
+        {
+            var students = await _context.student
+                .Where(s => s.applicationStatus == "Pending")
+                .Include(s => s.lecturer) // Include the lecturer if needed
+                .ToListAsync();
+
+            var model = students.Select(s => new StudentApplicationViewModel
+            {
+                StudentId = s.StudentId,
+                StudentName = s.StudentName,
+                ApplicationStatus = s.applicationStatus,
+                LecturerName = s.lecturer.LecturerName,
+                LecturerId = s.lecturer.LecturerId
+            }).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveApplication(string studentId)
+        {
+            var student = await _context.student.FindAsync(studentId);
+            if (student != null)
+            {
+                student.applicationStatus = "Approved";
+                _context.Update(student);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(PendingApplications));
+        }
+
+
     }
 }

@@ -133,13 +133,17 @@ namespace ADTest.Controllers
                 CommitteeName = t.ApplicationUser.Name,
                 email = t.ApplicationUser.Email,
                 PhoneNumber = t.ApplicationUser.PhoneNumber,
-                //ProgramName = t.AcademicProgram.ProgramName,
                 ProgramId = t.ProgramId
-
             }).ToList();
-            ViewData["ProgramNames"] = committee.ToDictionary(c => c.CommitteeId, c => c.AcademicProgram.ProgramName);
+
+            var programNames = committee.ToDictionary(c => c.CommitteeId, c => c.AcademicProgram != null ? c.AcademicProgram.ProgramName : "No Program Assigned");
+
+            ViewData["ProgramNames"] = programNames;
+            ViewData["ProgramId"] = new SelectList(_context.AcademicProgram, "ProgramId", "ProgramName");
+
             return View(model);
         }
+
 
         public async Task<IActionResult> EditCommittee(string id)
         {
@@ -199,9 +203,9 @@ namespace ADTest.Controllers
             return View(lecturer);
         }
 
-        public async Task<IActionResult> AssignYes(string lecturerId) // <--- Finish this pass ID and take only specific bill
+        public async Task<IActionResult> AssignYes(string lecturerId)
         {
-            var lecturer = _context.lecturer.Find(lecturerId);
+            var lecturer = await _context.lecturer.Include(l => l.ApplicationUser).FirstOrDefaultAsync(l => l.LecturerId == lecturerId);
             if (lecturer != null)
             {
                 lecturer.isCommittee = "Yes";
@@ -211,10 +215,23 @@ namespace ADTest.Controllers
 
                 await _userManager.RemoveFromRoleAsync(user, "Lecturer");
                 await _userManager.AddToRoleAsync(user, "Committee");
+
+                // Create committee record
+                var committee = new Committee
+                {
+                    CommitteeName = lecturer.ApplicationUser.Name,
+                    CommitteeId = lecturerId, // Assuming lecturerId can be used as CommitteeId
+                    ApplicationUserId = lecturer.ApplicationUserId,
+                    ProgramId = null // Initially, no program assigned
+                };
+
+                _context.committee.Add(committee);
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("AssignCommittee");
         }
+
 
         public async Task<IActionResult> AssignNo(string lecturerId) // <--- Finish this pass ID and take only specific bill
         {
@@ -231,6 +248,23 @@ namespace ADTest.Controllers
             }
 
             return RedirectToAction("AssignCommittee");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignProgram(string committeeId, string ProgramId)
+        {
+            var committee = await _context.committee.Include(t => t.ApplicationUser).Include(t => t.AcademicProgram).FirstOrDefaultAsync(t => t.CommitteeId == committeeId);
+
+            if (committee == null)
+            {
+                return NotFound();
+            }
+
+            committee.ProgramId = ProgramId;
+            _context.Update(committee);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageCommittee");
         }
         // ADMIN SIDE - END //
 

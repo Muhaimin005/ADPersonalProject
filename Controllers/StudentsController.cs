@@ -29,11 +29,70 @@ namespace ADTest.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> SelectSupervisor()
         {
-            var applicationDbContext = _context.student.Include(s => s.AcademicProgram).Include(s => s.ApplicationUser).Include(s => s.lecturer);
-            return View(await applicationDbContext.ToListAsync());
+            var lecturers = await _context.lecturer.Include(t=> t.ApplicationUser).ToListAsync();
+
+            var model = lecturers.Select(t => new LecturerViewModel
+            {
+                lecturerId = t.LecturerId,
+                LecturerName = t.ApplicationUser.Name,
+                email = t.ApplicationUser.Email,
+                PhoneNumber = t.ApplicationUser.PhoneNumber,
+                LecturerAddress = t.LecturerAddress,
+                FieldofStudy = t.FieldofStudy,
+                Domain = t.domain,
+                IsCommittee = t.isCommittee,
+            }).ToList();
+
+            return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Apply(string lecturerId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var student = await _context.student
+                .FirstOrDefaultAsync(s => s.ApplicationUserId == user.Id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            student.LecturerId = lecturerId;
+            student.applicationStatus = "Pending";
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Students", new { id = user.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelApplication(string studentId)
+        {
+            var student = await _context.student
+                .FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            student.LecturerId = null;
+            student.applicationStatus = "Cancelled";
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = student.ApplicationUserId });
+        }
+
+
 
         // GET: Students/Details/5
         [Route("Details")]

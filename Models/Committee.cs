@@ -16,7 +16,7 @@ namespace ADTest.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         [ForeignKey("AcademicProgram")]
-        public string ProgramId { get; set; }
+        public string? ProgramId { get; set; }
         public virtual AcademicProgram AcademicProgram { get; set; }
 
     }

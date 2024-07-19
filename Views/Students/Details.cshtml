@@ -8,6 +8,7 @@
     var roles = UserManager.GetRolesAsync(await UserManager.GetUserAsync(User)).Result;
 }
 
+
 <h1>Details</h1>
 
 <div>
@@ -64,4 +65,11 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.StudentId">Edit</a> |
+    @if (Model.LecturerName != null && Model.ApplicationStatus == "Pending")
+    {
+        <form asp-action="CancelApplication" method="post">
+            <input type="hidden" name="studentId" value="@Model.StudentId" />
+            <button type="submit" class="btn btn-danger">Cancel Application</button>
+        </form>
+    }
 </div>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ADTest.Models.ViewModel.LecturerViewModel>
+
+@{
+    ViewData["Title"] = "Select Supervisor";
+}
+
+<h1>Select Supervisor</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Field of Study</th>
+            <th>Domain</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.LecturerName)</td>
+                <td>@Html.DisplayFor(modelItem => item.FieldofStudy)</td>
+                <td>@Html.DisplayFor(modelItem => item.Domain)</td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="confirmApplication('@item.LecturerName', '@item.lecturerId')">Apply</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form id="applyForm" asp-action="Apply" method="post" style="display:none;">
+    <input type="hidden" name="lecturerId" id="lecturerId" />
+</form>
+
+<script>
+    function confirmApplication(lecturerName, lecturerId) {
+        if (confirm('Are you sure you want to apply to ' + lecturerName + '?')) {
+            document.getElementById('lecturerId').value = lecturerId;
+            document.getElementById('applyForm').submit();
+        }
+    }
+</script>

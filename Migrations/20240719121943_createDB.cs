@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ADTest.Migrations
 {
     /// <inheritdoc />
-    public partial class MajorUpdateOnAppUser : Migration
+    public partial class createDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -249,12 +249,26 @@ namespace ADTest.Migrations
                 {
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProgramId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    applicationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_student", x => x.StudentId);
+                    table.ForeignKey(
+                        name: "FK_student_AcademicProgram_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "AcademicProgram",
+                        principalColumn: "ProgramId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_student_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_student_lecturer_LecturerId",
                         column: x => x.LecturerId,
@@ -267,10 +281,10 @@ namespace ADTest.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2171c4a8-89ad-49c3-839a-b998615e0939", null, "Lecturer", "Lecturer" },
-                    { "a87ea4bf-d988-452e-b297-b0e9d2a53259", null, "Admin", "Admin" },
-                    { "cd4bdd1d-81d1-46a9-a9aa-c3d6db443217", null, "Committee", "Committee" },
-                    { "d09f9317-ca1d-42bd-9fd7-458dea166099", null, "Student", "Student" }
+                    { "134bab81-f96e-4195-b272-e0ca454fd556", null, "Student", "Student" },
+                    { "14eca7bd-5f1f-48f7-be50-34da34f67f92", null, "Admin", "Admin" },
+                    { "458329ba-5029-40ee-be80-595dd840021d", null, "Committee", "Committee" },
+                    { "fc9e0046-e25f-465b-8a2c-f47a2243d1dd", null, "Lecturer", "Lecturer" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -333,9 +347,19 @@ namespace ADTest.Migrations
                 column: "LecturerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_student_ApplicationUserId",
+                table: "student",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_student_LecturerId",
                 table: "student",
                 column: "LecturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_student_ProgramId",
+                table: "student",
+                column: "ProgramId");
         }
 
         /// <inheritdoc />

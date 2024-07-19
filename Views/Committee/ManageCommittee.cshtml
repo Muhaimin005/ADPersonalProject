@@ -1,9 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<ADTest.Models.ViewModel.ComitteeViewModel>
+﻿@model List<Lecturer>
 
 @{
     ViewData["Title"] = "Manage Committee";
@@ -27,27 +22,26 @@
             <th>
                 Program
             </th>
-            <th></th>
+            <th>
+                Action
+            </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in @Model)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CommitteeName)
+                    @Html.DisplayFor(modelItem => item.LecturerName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CommitteeId)
+                    @Html.DisplayFor(modelItem => item.LecturerId)
                 </td>
                 <td>
-                   @*  @Html.DisplayFor(modelItem => item.AcademicProgram.ProgramName) *@
-                    @programNames[item.CommitteeId]
-                     
                 </td>
                 <td>
-                    <a asp-action="EditCommittee" asp-route-id="@item.CommitteeId">Edit</a> |
-                    <a asp-action="DeleteCommittee" asp-route-id="@item.CommitteeId">Delete</a>
+                    <a asp-controller="Lecturers" asp-action="Edit" asp-route-id="@item.LecturerId">Edit</a> |
+                    <a asp-action="AssignNo" asp-route-lecturerId="@item.LecturerId">Unassign</a>
                 </td>
             </tr>
         }

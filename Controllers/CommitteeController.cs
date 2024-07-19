@@ -61,6 +61,12 @@ namespace ADTest.Controllers
 			// Handle error (return JSON or appropriate response)
 			return Json(new { success = false });
 		}
+
+        public async Task<IActionResult> ManageStudent()
+        {
+            List<Student> studentList = _context.student.ToList();
+            return View(studentList);
+        }
         // COMMITTEE SIDE - END //
 
         // ADMIN SIDE - START //
@@ -120,25 +126,11 @@ namespace ADTest.Controllers
 
         public async Task<IActionResult> ManageCommittee()
         {
-            var committee = await _context.committee.Include(t => t.ApplicationUser).Include(t => t.AcademicProgram).ToListAsync();
+            List<Lecturer> lecturer = _context.lecturer
+                .Where(l => l.isCommittee == "Yes")
+                .ToList();
 
-            if (committee == null)
-            {
-                return NotFound();
-            }
-
-            var model = committee.Select(t => new ComitteeViewModel
-            {
-                CommitteeId = t.CommitteeId,
-                CommitteeName = t.ApplicationUser.Name,
-                email = t.ApplicationUser.Email,
-                PhoneNumber = t.ApplicationUser.PhoneNumber,
-                //ProgramName = t.AcademicProgram.ProgramName,
-                ProgramId = t.ProgramId
-
-            }).ToList();
-            ViewData["ProgramNames"] = committee.ToDictionary(c => c.CommitteeId, c => c.AcademicProgram.ProgramName);
-            return View(model);
+            return View(lecturer);
         }
 
         public async Task<IActionResult> EditCommittee(string id)

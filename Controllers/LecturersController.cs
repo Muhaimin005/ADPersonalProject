@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using ADTest.Data;
 using ADTest.Models;
 using ADTest.Models.ViewModel;
+using System.Data;
 
 namespace ADTest.Controllers
 {
@@ -87,8 +88,8 @@ namespace ADTest.Controllers
                 PhoneNumber = t.ApplicationUser.PhoneNumber,
                 LecturerAddress = t.LecturerAddress,
                 FieldofStudy = t.FieldofStudy,
-                Domain = t.domain
-
+                Domain = t.domain,
+                IsCommittee = t.isCommittee,
             }).ToList();
 
             return View(model);
@@ -136,6 +137,7 @@ namespace ADTest.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    IC = Input.LecturerID,
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
@@ -159,6 +161,7 @@ namespace ADTest.Controllers
                         ApplicationUserId = user.Id,
                         FieldofStudy = Input.FieldofStudy,
                         domain = "Pending",
+                        isCommittee = "No",
                     };
 
                     _context.lecturer.Add(lecturer);
@@ -303,6 +306,39 @@ namespace ADTest.Controllers
         private bool LecturerExists(string id)
         {
             return _context.lecturer.Any(e => e.LecturerId == id);
+        }
+
+        public async Task<ApplicationUser> GetUserByLecturerIdAsync(string lecturerId)
+        {
+            return await _userManager.Users.SingleOrDefaultAsync(u => u.IC == lecturerId);
+        }
+
+        [HttpPost("UpdateCommittee")]
+        public async Task<IActionResult> UpdateCommittee(string status, string lecturerId)
+        {
+            var lecturer = _context.lecturer.Find(lecturerId);
+            if (lecturer != null)
+            {
+                lecturer.isCommittee = status;
+                _context.SaveChanges();
+
+                var user = await GetUserByLecturerIdAsync(lecturerId);
+                if (status == "Yes")
+                {
+                    await _userManager.RemoveFromRoleAsync(user, "Lecturer");
+                    await _userManager.AddToRoleAsync(user, "Committee");
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(user, "Committee");
+                    await _userManager.AddToRoleAsync(user, "Lecturer");
+                }
+
+                // Handle success (return JSON or redirect)
+                return Json(new { success = true });
+            }
+            // Handle error (return JSON or appropriate response)
+            return Json(new { success = false });
         }
     }
 }

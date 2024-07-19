@@ -46,7 +46,7 @@
 	function updateDomain(selectedStatus, lecturerId) {
 		$.ajax({
 			type: 'POST',
-			url: '/Committee/UpdateDomain', // Adjust the route
+			url: '/Committee/UpdateDomain',
 			data: { status: selectedStatus, lecturerId: lecturerId },
 			success: function (result) {
 				// Handle success (e.g., show a message)

@@ -24,7 +24,12 @@
             <th>
                 Domain
             </th>
-            <th></th>
+            <th>
+                Action
+            </th>
+            <th>
+                Committee
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +52,29 @@
                 <a asp-action="Details" asp-route-id="@item.lecturerId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.lecturerId">Delete</a>
             </td>
+            <td>
+                <select asp-for="@item.IsCommittee" class="form-control" onchange="updateCommittee(this.value, '@item.lecturerId')">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </td>
         </tr>
 }
     </tbody>
 </table>
+
+<script>
+    function updateCommittee(selectedStatus, lecturerId) {
+        $.ajax({
+            type: 'POST',
+            url: '/Lecturers/UpdateCommittee',
+            data: { status: selectedStatus, lecturerId: lecturerId },
+            success: function (result) {
+                // Handle success (e.g., show a message)
+            },
+            error: function () {
+                // Handle error (e.g., display an error message)
+            }
+        });
+    }
+</script>

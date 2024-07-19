@@ -1,0 +1,46 @@
+﻿@model List<Student>
+
+@{
+	ViewData["Title"] = "Manage Student";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<table class="table table-bordered table-striped">
+	<h4>Manage Student</h4>
+	<thead>
+		<tr>
+			<th>
+				Student ID
+			</th>
+			<th>
+				Student Name
+            </th>
+            <th>
+                Program ID
+            </th>
+			<th>
+				Action
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var obj in Model)
+		{
+			<tr>
+				<td>
+					@obj.StudentId
+				</td>
+				<td>
+					@obj.StudentName
+                </td>
+                <td>
+                    @obj.ProgramId
+                </td>
+				<td>
+					<a asp-action="" asp-route-id="@obj.StudentId">Edit</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

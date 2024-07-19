@@ -43,7 +43,7 @@ namespace ADTest.Controllers
                 .Include(s => s.ApplicationUser)
                 .Include(s => s.AcademicProgram)
                 .Include(s => s.lecturer)
-                .FirstOrDefaultAsync(s => s.ApplicationUserId == id);
+                .FirstOrDefaultAsync(s => s.ApplicationUserId  == id);
 
             if (student == null)
             {
@@ -54,7 +54,7 @@ namespace ADTest.Controllers
 
             var model = new StudentViewModel
             {
-                StudentId = student.StudentId,
+                StudentId = student.ApplicationUser.IC,
                 StudentName = student.ApplicationUser.Name,
                 StudentEmail = student.ApplicationUser.Email,
                 StudentPhone = student.ApplicationUser.PhoneNumber,
@@ -107,7 +107,7 @@ namespace ADTest.Controllers
             {
                 var student = new Student
                 {
-                    StudentId = input.StudentId,
+                    StudentId = user.IC,
                     StudentName = input.StudentName,
                     ApplicationUserId = user.Id,
                     LecturerId = null,

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719121943_createDB")]
+    [Migration("20240719132936_createDB")]
     partial class createDB
     {
         /// <inheritdoc />
@@ -184,7 +184,14 @@ namespace ADTest.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProposalId"));
 
-                    b.Property<string>("LecturerId")
+                    b.Property<string>("LecturerId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LecturerId2")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("status")
@@ -201,7 +208,11 @@ namespace ADTest.Migrations
 
                     b.HasKey("ProposalId");
 
-                    b.HasIndex("LecturerId");
+                    b.HasIndex("LecturerId1");
+
+                    b.HasIndex("LecturerId2");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("proposal");
                 });
@@ -270,25 +281,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "14eca7bd-5f1f-48f7-be50-34da34f67f92",
+                            Id = "d5e01340-f423-42cd-aeb4-3f371f137bbc",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "134bab81-f96e-4195-b272-e0ca454fd556",
+                            Id = "3b4332d0-8e50-4379-b104-d8e391298fdf",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "fc9e0046-e25f-465b-8a2c-f47a2243d1dd",
+                            Id = "655260bf-5903-4da4-a962-1d193c0f1aae",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "458329ba-5029-40ee-be80-595dd840021d",
+                            Id = "d5a50d30-cb01-41ef-a812-0cbecb29297a",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });
@@ -436,11 +447,25 @@ namespace ADTest.Migrations
 
             modelBuilder.Entity("ADTest.Models.Proposal", b =>
                 {
-                    b.HasOne("ADTest.Models.Lecturer", "lecturer")
+                    b.HasOne("ADTest.Models.Lecturer", "lecturer1")
                         .WithMany()
-                        .HasForeignKey("LecturerId");
+                        .HasForeignKey("LecturerId1");
 
-                    b.Navigation("lecturer");
+                    b.HasOne("ADTest.Models.Lecturer", "lecturer2")
+                        .WithMany()
+                        .HasForeignKey("LecturerId2");
+
+                    b.HasOne("ADTest.Models.Student", "student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("lecturer1");
+
+                    b.Navigation("lecturer2");
+
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("ADTest.Models.Student", b =>

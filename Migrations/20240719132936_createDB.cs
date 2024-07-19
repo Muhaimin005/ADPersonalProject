@@ -223,27 +223,6 @@ namespace ADTest.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "proposal",
-                columns: table => new
-                {
-                    ProposalId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_proposal", x => x.ProposalId);
-                    table.ForeignKey(
-                        name: "FK_proposal_lecturer_LecturerId",
-                        column: x => x.LecturerId,
-                        principalTable: "lecturer",
-                        principalColumn: "LecturerId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "student",
                 columns: table => new
                 {
@@ -276,15 +255,49 @@ namespace ADTest.Migrations
                         principalColumn: "LecturerId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "proposal",
+                columns: table => new
+                {
+                    ProposalId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LecturerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    LecturerId2 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_proposal", x => x.ProposalId);
+                    table.ForeignKey(
+                        name: "FK_proposal_lecturer_LecturerId1",
+                        column: x => x.LecturerId1,
+                        principalTable: "lecturer",
+                        principalColumn: "LecturerId");
+                    table.ForeignKey(
+                        name: "FK_proposal_lecturer_LecturerId2",
+                        column: x => x.LecturerId2,
+                        principalTable: "lecturer",
+                        principalColumn: "LecturerId");
+                    table.ForeignKey(
+                        name: "FK_proposal_student_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "student",
+                        principalColumn: "StudentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "134bab81-f96e-4195-b272-e0ca454fd556", null, "Student", "Student" },
-                    { "14eca7bd-5f1f-48f7-be50-34da34f67f92", null, "Admin", "Admin" },
-                    { "458329ba-5029-40ee-be80-595dd840021d", null, "Committee", "Committee" },
-                    { "fc9e0046-e25f-465b-8a2c-f47a2243d1dd", null, "Lecturer", "Lecturer" }
+                    { "3b4332d0-8e50-4379-b104-d8e391298fdf", null, "Student", "Student" },
+                    { "655260bf-5903-4da4-a962-1d193c0f1aae", null, "Lecturer", "Lecturer" },
+                    { "d5a50d30-cb01-41ef-a812-0cbecb29297a", null, "Committee", "Committee" },
+                    { "d5e01340-f423-42cd-aeb4-3f371f137bbc", null, "Admin", "Admin" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -342,9 +355,19 @@ namespace ADTest.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_proposal_LecturerId",
+                name: "IX_proposal_LecturerId1",
                 table: "proposal",
-                column: "LecturerId");
+                column: "LecturerId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_proposal_LecturerId2",
+                table: "proposal",
+                column: "LecturerId2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_proposal_StudentId",
+                table: "proposal",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_student_ApplicationUserId",
@@ -387,10 +410,10 @@ namespace ADTest.Migrations
                 name: "proposal");
 
             migrationBuilder.DropTable(
-                name: "student");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "student");
 
             migrationBuilder.DropTable(
                 name: "AcademicProgram");

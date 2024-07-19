@@ -312,33 +312,5 @@ namespace ADTest.Controllers
         {
             return await _userManager.Users.SingleOrDefaultAsync(u => u.IC == lecturerId);
         }
-
-        [HttpPost("UpdateCommittee")]
-        public async Task<IActionResult> UpdateCommittee(string status, string lecturerId)
-        {
-            var lecturer = _context.lecturer.Find(lecturerId);
-            if (lecturer != null)
-            {
-                lecturer.isCommittee = status;
-                _context.SaveChanges();
-
-                var user = await GetUserByLecturerIdAsync(lecturerId);
-                if (status == "Yes")
-                {
-                    await _userManager.RemoveFromRoleAsync(user, "Lecturer");
-                    await _userManager.AddToRoleAsync(user, "Committee");
-                }
-                else
-                {
-                    await _userManager.RemoveFromRoleAsync(user, "Committee");
-                    await _userManager.AddToRoleAsync(user, "Lecturer");
-                }
-
-                // Handle success (return JSON or redirect)
-                return Json(new { success = true });
-            }
-            // Handle error (return JSON or appropriate response)
-            return Json(new { success = false });
-        }
     }
 }

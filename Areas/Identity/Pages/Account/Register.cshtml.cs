@@ -79,9 +79,9 @@ namespace ADTest.Areas.Identity.Pages.Account
             [Display(Name = "Name")]
             public string Name { get; set; }
 
-            //[Required]
-            //[Display(Name = "ID")]
-            //public string Id { get; set; }
+            [Required]
+            [Display(Name = "IC")]
+            public string IC { get; set; }
 
             [Required]
             [EmailAddress]
@@ -127,7 +127,7 @@ namespace ADTest.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser
                 {
-                    //Id = Input.Id,
+                    IC = Input.IC,
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,

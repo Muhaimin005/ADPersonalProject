@@ -11,6 +11,10 @@ namespace ADTest.Models
 
         public string StudentName { get; set; }
 
+        [ForeignKey("AcademicProgram")]  
+        public string ProgramId { get; set; }
+        public virtual AcademicProgram AcademicProgram { get; set; }
+
         public string? LecturerId { get; set; }
         [ForeignKey(nameof(LecturerId))]
         [ValidateNever]
@@ -18,5 +22,8 @@ namespace ADTest.Models
 
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
+        public string applicationStatus { get; set; }
     }
 }

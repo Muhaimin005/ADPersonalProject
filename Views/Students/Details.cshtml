@@ -1,0 +1,68 @@
+﻿@model ADTest.Models.ViewModel.StudentViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+    var roles = UserManager.GetRolesAsync(await UserManager.GetUserAsync(User)).Result;
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentEmail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentEmail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentPhone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentPhone)
+        </dd>
+        <dt class="col-sm-2">
+            Program Name
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var programName = ViewData["ProgramName"] as string;
+                <span>@programName</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LecturerName)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.LecturerName != null)
+            {
+                @Html.DisplayFor(model => model.LecturerName)
+            }
+            else
+            {
+                <span>No supervisor registered</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicationStatus)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationStatus)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.StudentId">Edit</a> |
+    <a asp-action="Create" asp-route-id="@UserManager.GetUserId(User)">Fill in detail</a> |
+</div>

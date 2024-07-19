@@ -1,0 +1,92 @@
+﻿@model List<Lecturer>
+
+@{
+    ViewData["Title"] = "Assign Committee";
+    var programNames = ViewData["ProgramNames"] as Dictionary<string, string>;
+}
+
+<h1>Assign Committee</h1>
+
+<table class="table">
+    <h4>Committee Members</h4>
+    <thead>
+        <tr>
+            <th>
+                Lecturer Name
+            </th>
+            <th>
+                Lecturer ID
+            </th>
+            <th>
+                Program
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(l => l.LecturerName))
+        {
+            if (item.isCommittee == "Yes")
+            {
+                <tr>
+                    <td>
+                        @item.LecturerName
+                    </td>
+                    <td>
+                        @item.LecturerId
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <a asp-action="AssignNo" asp-route-lecturerId="@item.LecturerId">Unassign</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<table class="table">
+    <h4>Non-Committee Members</h4>
+    <thead>
+        <tr>
+            <th>
+                Lecturer Name
+            </th>
+            <th>
+                Lecturer ID
+            </th>
+            <th>
+                Program
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(l => l.LecturerName))
+        {
+            if (item.isCommittee == "No")
+            {
+                <tr>
+                    <td>
+                        @item.LecturerName
+                    </td>
+                    <td>
+                        @item.LecturerId
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <a asp-action="AssignYes" asp-route-lecturerId="@item.LecturerId">Assign</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

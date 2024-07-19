@@ -28,6 +28,11 @@
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
+                <input asp-for="Input.IC" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                <label asp-for="Input.IC">IC Number</label>
+                <span asp-validation-for="Input.IC" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="" aria-required="true" placeholder="" />
                 <label asp-for="Input.PhoneNumber">Phone Number</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>

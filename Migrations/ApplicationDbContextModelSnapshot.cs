@@ -210,18 +210,30 @@ namespace ADTest.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LecturerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProgramId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StudentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("applicationStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("StudentId");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("LecturerId");
+
+                    b.HasIndex("ProgramId");
 
                     b.ToTable("student");
                 });
@@ -255,25 +267,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a87ea4bf-d988-452e-b297-b0e9d2a53259",
+                            Id = "14eca7bd-5f1f-48f7-be50-34da34f67f92",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "d09f9317-ca1d-42bd-9fd7-458dea166099",
+                            Id = "134bab81-f96e-4195-b272-e0ca454fd556",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "2171c4a8-89ad-49c3-839a-b998615e0939",
+                            Id = "fc9e0046-e25f-465b-8a2c-f47a2243d1dd",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "cd4bdd1d-81d1-46a9-a9aa-c3d6db443217",
+                            Id = "458329ba-5029-40ee-be80-595dd840021d",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });
@@ -430,9 +442,25 @@ namespace ADTest.Migrations
 
             modelBuilder.Entity("ADTest.Models.Student", b =>
                 {
+                    b.HasOne("ADTest.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ADTest.Models.Lecturer", "lecturer")
                         .WithMany()
                         .HasForeignKey("LecturerId");
+
+                    b.HasOne("ADTest.Models.AcademicProgram", "AcademicProgram")
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AcademicProgram");
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("lecturer");
                 });

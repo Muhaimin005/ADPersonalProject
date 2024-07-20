@@ -375,7 +375,85 @@ namespace ADTest.Controllers
             return File(proposal.proposalForm, "application/octet-stream", "ProposalForm.pdf");
         }
 
+        //evaluator
+        [Route("ProposalsToEvaluate")]
+        public async Task<IActionResult> ProposalsToEvaluate()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var lecturer = await _context.lecturer.Include(l => l.ApplicationUser)
+                                                   .FirstOrDefaultAsync(l => l.ApplicationUserId == user.Id);
 
+            var proposals = await _context.proposal
+                .Where(p => p.LecturerId1 == lecturer.LecturerId || p.LecturerId2 == lecturer.LecturerId)
+                .Include(p => p.student)
+                .ToListAsync();
 
+            return View(proposals);
+        }
+
+        [Route("ProposalsDetails")]
+        public async Task<IActionResult> ProposalDetails(int id)
+        {
+            var proposal = await _context.proposal
+                .Include(p => p.student)
+                .FirstOrDefaultAsync(p => p.ProposalId == id);
+
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            return View(proposal);
+        }
+
+        [Route("SubmitEvaluation")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitEvaluation(int id, string status, string comment)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var lecturer = await _context.lecturer.Include(l => l.ApplicationUser)
+                                                   .FirstOrDefaultAsync(l => l.ApplicationUserId == user.Id);
+
+            var proposal = await _context.proposal
+                .FirstOrDefaultAsync(p => p.ProposalId == id);
+
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            if (proposal.LecturerId1 == lecturer.LecturerId)
+            {
+                proposal.Comment1 = comment;
+            }
+            else if (proposal.LecturerId2 == lecturer.LecturerId)
+            {
+                proposal.Comment2 = comment;
+            }
+
+            proposal.status = status;
+
+            _context.proposal.Update(proposal);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ProposalsToEvaluate");
+        }
+
+        // GET: Lecturer/DownloadProposalForm/1
+        [Route("DownloadProposalForm")]
+        public IActionResult DownloadProposalForm(int id)
+        {
+            var proposal = _context.proposal.FirstOrDefault(p => p.ProposalId == id);
+
+            if (proposal == null || proposal.proposalForm == null)
+            {
+                return NotFound();
+            }
+
+            var fileBytes = proposal.proposalForm;
+            var fileName = $"Proposal_{id}.pdf"; // Adjust based on actual file type
+            return File(fileBytes, "application/pdf", fileName); // Adjust MIME type if necessary
+        }
     }
 }

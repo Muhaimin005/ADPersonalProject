@@ -27,5 +27,8 @@ namespace ADTest.Models
         public int semester { get; set; }
         public string session { get; set; }
         public byte[] proposalForm { get; set; } // Store the file data as a byte array
+        public string? Comment1 { get; set; }
+        public string? Comment2 { get; set; }
+
     }
 }

@@ -1,0 +1,38 @@
+﻿@model ADTest.Models.Proposal
+
+<h2>Proposal Details</h2>
+
+<div>
+    <h4>@Model.title</h4>
+    <p><strong>Type:</strong> @Model.type</p>
+    <p><strong>Status:</strong> @Model.status</p>
+    <p><strong>Student:</strong> @Model.student.StudentName</p>
+    <p> <a asp-action="DownloadProposalForm" asp-route-id="@Model.ProposalId" class="btn btn-secondary">Download Proposal</a></p>
+</div>
+
+<form asp-action="SubmitEvaluation" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.ProposalId" />
+
+    <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status" class="form-control">
+            <option value="Accepted">Accepted</option>
+            <option value="Accepted with Conditions">Accepted with Conditions</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea id="comment" name="comment" class="form-control" rows="4"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+</form>
+
+<div>
+    <h4>Previous Comments</h4>
+    <p><strong>Evaluator 1:</strong> @Model.Comment1</p>
+    <p><strong>Evaluator 2:</strong> @Model.Comment2</p>
+</div>

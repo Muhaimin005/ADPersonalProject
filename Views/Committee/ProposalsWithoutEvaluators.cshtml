@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ProposalViewModel>
+
+<h2>Proposals Without Evaluators</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Student Name</th>
+            <th>Evaluator 1</th>
+            <th>Evaluator 2</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var proposal in Model)
+        {
+            <tr>
+                <td>@proposal.Title</td>
+                <td>@proposal.Type</td>
+                <td>@proposal.StudentName</td>
+                <td>@proposal.LecturerId1 ?? "Not Assigned"</td>
+                <td>@proposal.LecturerId2 ?? "Not Assigned"</td>
+                <td>
+                    <a class="btn btn-primary" asp-action="AssignEvaluators" asp-route-id="@proposal.ProposalId">Assign Evaluators</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -332,6 +332,104 @@ namespace ADTest.Controllers
             return RedirectToAction(nameof(PendingApplications));
         }
 
+        [Route("ProposalsWithoutEvaluators")]
+        public async Task<IActionResult> ProposalsWithoutEvaluators()
+        {
+            var proposals = await _context.proposal
+                .Where(p => p.LecturerId1 == null || p.LecturerId2 == null)
+                .Include(p => p.student)
+                .ToListAsync();
 
+            var model = proposals.Select(p => new ProposalViewModel
+            {
+                ProposalId = p.ProposalId,
+                Title = p.title,
+                Type = p.type,
+                LecturerId1 = p.LecturerId1,
+                LecturerId2 = p.LecturerId2,
+                StudentName = p.student.StudentName
+            }).ToList();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> AssignEvaluators(int id)
+        {
+            var proposal = await _context.proposal.Include(p => p.student).FirstOrDefaultAsync(p => p.ProposalId == id);
+
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            var availableEvaluators = await _context.lecturer.Include(l => l.ApplicationUser)
+                .Where(l =>l.domain == proposal.type && l.LecturerId != proposal.LecturerId1 && l.LecturerId != proposal.LecturerId2 && l.LecturerId != proposal.student.LecturerId)
+                .ToListAsync();
+
+            ViewBag.Evaluators = new SelectList(availableEvaluators, "LecturerId", "ApplicationUser.Name");
+
+            var model = new ProposalViewModel
+            {
+                ProposalId = proposal.ProposalId,
+                Title = proposal.title,
+                Type = proposal.type,
+                LecturerId1 = proposal.LecturerId1,
+                LecturerId2 = proposal.LecturerId2,
+                StudentName = proposal.student.StudentName
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignEvaluators(ProposalViewModel model)
+        {
+            var proposal = await _context.proposal.FindAsync(model.ProposalId);
+
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            proposal.LecturerId1 = model.LecturerId1;
+            proposal.LecturerId2 = model.LecturerId2;
+
+            _context.proposal.Update(proposal);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ProposalsWithoutEvaluators");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AutoAssignEvaluators(int id)
+        {
+            var proposal = await _context.proposal.Include(p => p.student).FirstOrDefaultAsync(p => p.ProposalId == id);
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            var availableEvaluators = await _context.lecturer
+                .Where(l => l.LecturerId != proposal.student.LecturerId)
+                .ToListAsync();
+
+            var suitableEvaluators = availableEvaluators
+                .Where(l => l.domain.Contains(proposal.type))
+                .ToList();
+
+            if (suitableEvaluators.Count < 2)
+            {
+                ModelState.AddModelError("", "Not enough evaluators available.");
+                return RedirectToAction("AssignEvaluators", new { id = id });
+            }
+
+            proposal.LecturerId1 = suitableEvaluators[0].LecturerId;
+            proposal.LecturerId2 = suitableEvaluators[1].LecturerId;
+
+            _context.proposal.Update(proposal);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("AssignEvaluators");
+        }
     }
 }

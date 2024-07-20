@@ -1,0 +1,29 @@
+﻿@model ProposalViewModel
+
+<h2>Assign Evaluators</h2>
+
+<form asp-action="AssignEvaluators" method="post">
+    <input type="hidden" asp-for="ProposalId" />
+
+    <div class="form-group">
+        <label asp-for="StudentName"></label>
+        <input asp-for="StudentName" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <input asp-for="Type" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="LecturerId1">Evaluator 1</label>
+        <select asp-for="LecturerId1" class="form-control" asp-items="ViewBag.Evaluators"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="LecturerId2">Evaluator 2</label>
+        <select asp-for="LecturerId2" class="form-control" asp-items="ViewBag.Evaluators"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Assign</button>
+</form>

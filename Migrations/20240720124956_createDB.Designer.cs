@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240720072212_createDB")]
+    [Migration("20240720124956_createDB")]
     partial class createDB
     {
         /// <inheritdoc />
@@ -183,6 +183,12 @@ namespace ADTest.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProposalId"));
 
+                    b.Property<string>("Comment1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LecturerId1")
                         .HasColumnType("nvarchar(450)");
 
@@ -299,25 +305,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2f431968-f804-40a2-9173-42b71b2c682a",
+                            Id = "3becf9e2-8ea9-43c0-b6e0-a5ff6109cd25",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "3a750479-3d30-4dde-9429-e33db8c89fda",
+                            Id = "4a9ba88c-9153-4023-8271-ec8ca7eea95d",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "baae3c6d-1c4d-46a9-8f87-bfa9e1302f29",
+                            Id = "f0c22807-b23f-4780-b9e2-5cc58f8ee528",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "a84ccc75-c588-40e1-99cf-3a5115b5f3a2",
+                            Id = "fc1aaa44-4b39-4918-9b0e-98c6ad3c3cd6",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });

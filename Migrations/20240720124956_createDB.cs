@@ -270,7 +270,9 @@ namespace ADTest.Migrations
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     semester = table.Column<int>(type: "int", nullable: false),
                     session = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    proposalForm = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    proposalForm = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Comment1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment2 = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -298,10 +300,10 @@ namespace ADTest.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2f431968-f804-40a2-9173-42b71b2c682a", null, "Admin", "Admin" },
-                    { "3a750479-3d30-4dde-9429-e33db8c89fda", null, "Student", "Student" },
-                    { "a84ccc75-c588-40e1-99cf-3a5115b5f3a2", null, "Committee", "Committee" },
-                    { "baae3c6d-1c4d-46a9-8f87-bfa9e1302f29", null, "Lecturer", "Lecturer" }
+                    { "3becf9e2-8ea9-43c0-b6e0-a5ff6109cd25", null, "Admin", "Admin" },
+                    { "4a9ba88c-9153-4023-8271-ec8ca7eea95d", null, "Student", "Student" },
+                    { "f0c22807-b23f-4780-b9e2-5cc58f8ee528", null, "Lecturer", "Lecturer" },
+                    { "fc1aaa44-4b39-4918-9b0e-98c6ad3c3cd6", null, "Committee", "Committee" }
                 });
 
             migrationBuilder.CreateIndex(

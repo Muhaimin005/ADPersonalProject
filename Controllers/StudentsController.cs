@@ -13,6 +13,7 @@ using ADTest.Models.ViewModel;
 
 namespace ADTest.Controllers
 {
+    [Route("Students")]
     public class StudentsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

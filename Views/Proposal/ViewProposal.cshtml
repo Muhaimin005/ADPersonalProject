@@ -17,7 +17,7 @@
 				Proposal Type
 			</th>
 			<th>
-				Evaluator
+				Evaluator 
             </th>
             <th>
                 Status
@@ -40,15 +40,16 @@
 				<td>
 					@if (obj.LecturerId1 != null && obj.LecturerId2 != null)
 					{
-						@obj.LecturerId1
-						@obj.LecturerId2
+						@obj.lecturer1.LecturerName <br>
+						@obj.lecturer2.LecturerName
 					}
                 </td>
                 <td>
                     @obj.status
                 </td>
 				<td>
-					<a asp-action="ViewProposalForm" asp-route-id="@obj.ProposalId">View Form</a>
+					<a asp-action="ViewProposalForm" asp-route-id="@obj.ProposalId">View Form</a><br>
+					<a asp-action="ViewEvaluation" asp-route-id="@obj.ProposalId">View Evaluation</a>
 				</td>
 			</tr>
 		}

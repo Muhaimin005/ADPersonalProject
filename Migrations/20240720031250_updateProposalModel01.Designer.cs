@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719132936_createDB")]
-    partial class createDB
+    [Migration("20240720031250_updateProposalModel01")]
+    partial class updateProposalModel01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,7 +130,6 @@ namespace ADTest.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProgramId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CommitteeId");
@@ -193,6 +192,17 @@ namespace ADTest.Migrations
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("proposalForm")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("semester")
+                        .HasColumnType("int");
+
+                    b.Property<string>("session")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
                         .IsRequired()
@@ -281,25 +291,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d5e01340-f423-42cd-aeb4-3f371f137bbc",
+                            Id = "68cdb623-359c-454c-b9c3-04f1c71a4a33",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "3b4332d0-8e50-4379-b104-d8e391298fdf",
+                            Id = "39f2cfc3-d31c-4345-bd55-8ce2b8a62bac",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "655260bf-5903-4da4-a962-1d193c0f1aae",
+                            Id = "b69646dd-e06a-4cfb-8fae-93827054a13f",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "d5a50d30-cb01-41ef-a812-0cbecb29297a",
+                            Id = "3f0f83d6-cf92-4c0b-a4f4-453fdbda530c",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });
@@ -425,9 +435,7 @@ namespace ADTest.Migrations
 
                     b.HasOne("ADTest.Models.AcademicProgram", "AcademicProgram")
                         .WithMany()
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramId");
 
                     b.Navigation("AcademicProgram");
 

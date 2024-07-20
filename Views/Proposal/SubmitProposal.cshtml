@@ -1,0 +1,62 @@
+﻿@model ADTest.Models.ViewModel.ProposalInputModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Proposal</h1>
+
+<h4>Submit Proposal</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SubmitProposal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="StudentId" class="form-control" hidden aria-required="true" />
+            <div class="form-floating mb-3">
+                <input asp-for="title" class="form-control" autocomplete="" aria-required="true" placeholder="Proposal Title" />
+                <label asp-for="title">Proposal Title</label>
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="type" class="form-control">
+                    <option value="Research">Research</option>
+                    <option value="Development">Development</option>
+                </select>
+                <label asp-for="type">Project Type</label>
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="semester" class="form-control" autocomplete="" aria-required="true" placeholder="Semester" />
+                <label asp-for="semester">Semester</label>
+                <span asp-validation-for="semester" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="session" class="form-control" autocomplete="" aria-required="true" placeholder="Session" />
+                <label asp-for="session">Session</label>
+                <span asp-validation-for="session" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <a href="/assets/PSM1.PF_.05.docx" class="btn btn-primary" download>Download Proposal Form</a>
+            </div>
+            <div class="form-floating mb-3">
+                <h5>Submit Proposal Form</h5>
+                <input asp-for="proposalForm" class="form-control" aria-required="true" placeholder="Upload Form" />
+                <span asp-validation-for="proposalForm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -4,6 +4,7 @@ using ADTest.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADTest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240720024544_createDB")]
+    partial class createDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,17 +193,6 @@ namespace ADTest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<byte[]>("proposalForm")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("semester")
-                        .HasColumnType("int");
-
-                    b.Property<string>("session")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -288,25 +280,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "68cdb623-359c-454c-b9c3-04f1c71a4a33",
+                            Id = "24962f0b-e000-4d57-b705-33a9d458b51f",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "39f2cfc3-d31c-4345-bd55-8ce2b8a62bac",
+                            Id = "963c00fe-1296-4c32-bcb0-3072960bac45",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "b69646dd-e06a-4cfb-8fae-93827054a13f",
+                            Id = "1db1f287-ea00-4e53-a877-59f56185586c",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "3f0f83d6-cf92-4c0b-a4f4-453fdbda530c",
+                            Id = "111a06fc-b419-434d-83e9-03a0ef2de792",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });

@@ -24,8 +24,8 @@ namespace ADTest.Models
         [ValidateNever]
         public virtual Lecturer? lecturer2 { get; set; }
         public string status { get; set; }
-
-
-
+        public int semester { get; set; }
+        public string session { get; set; }
+        public byte[] proposalForm { get; set; } // Store the file data as a byte array
     }
 }

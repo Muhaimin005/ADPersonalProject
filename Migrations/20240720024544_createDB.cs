@@ -180,7 +180,7 @@ namespace ADTest.Migrations
                     CommitteeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CommitteeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProgramId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ProgramId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -189,8 +189,7 @@ namespace ADTest.Migrations
                         name: "FK_committee_AcademicProgram_ProgramId",
                         column: x => x.ProgramId,
                         principalTable: "AcademicProgram",
-                        principalColumn: "ProgramId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProgramId");
                     table.ForeignKey(
                         name: "FK_committee_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
@@ -294,10 +293,10 @@ namespace ADTest.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3b4332d0-8e50-4379-b104-d8e391298fdf", null, "Student", "Student" },
-                    { "655260bf-5903-4da4-a962-1d193c0f1aae", null, "Lecturer", "Lecturer" },
-                    { "d5a50d30-cb01-41ef-a812-0cbecb29297a", null, "Committee", "Committee" },
-                    { "d5e01340-f423-42cd-aeb4-3f371f137bbc", null, "Admin", "Admin" }
+                    { "111a06fc-b419-434d-83e9-03a0ef2de792", null, "Committee", "Committee" },
+                    { "1db1f287-ea00-4e53-a877-59f56185586c", null, "Lecturer", "Lecturer" },
+                    { "24962f0b-e000-4d57-b705-33a9d458b51f", null, "Admin", "Admin" },
+                    { "963c00fe-1296-4c32-bcb0-3072960bac45", null, "Student", "Student" }
                 });
 
             migrationBuilder.CreateIndex(

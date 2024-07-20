@@ -90,11 +90,25 @@ namespace ADTest.Controllers
             var userId = user.IC;
 
             var proposal = await _context.proposal
-                .Where(p => p.StudentId == userId)
+                .Include(x => x.lecturer1)
+				.Include(x => x.lecturer2)
+				.Where(p => p.StudentId == userId)
                 .ToListAsync();
 
             return View(proposal);
         }
+
+		public IActionResult ViewEvaluation(int id)
+		{
+
+			var proposal = _context.proposal
+                .Include (x => x.student)
+				.Include(x => x.lecturer1)
+				.Include(x => x.lecturer2)
+				.FirstOrDefault(x => x.ProposalId == id);
+
+			return View(proposal);
+		}
 
 		public IActionResult ViewProposalForm(int id)
 		{

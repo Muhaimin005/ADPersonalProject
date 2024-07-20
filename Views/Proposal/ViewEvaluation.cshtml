@@ -1,0 +1,48 @@
+﻿@model ADTest.Models.Proposal
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Evaluation</h1>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.title)</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.student.StudentName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.student.StudentName)
+        </dd>
+        <dt class ="col-sm-2">title : </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.title)
+        </dd>
+        <dt class="col-sm-2">Type : </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.type)
+        </dd>
+        <dt class="col-sm-2">Evaluator 1 : </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.lecturer1.LecturerName)
+        </dd>
+        <dt class="col-sm-2">Comment: </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comment1)
+        </dd>
+        <dt class="col-sm-2">Evaluator 2 : </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.lecturer2.LecturerName)
+        </dd>
+        <dt class="col-sm-2">Comment: </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comment2)
+        </dd>
+        <dt class="col-sm-2">Proposal Status : </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.status)
+        </dd>
+    </dl>
+</div>

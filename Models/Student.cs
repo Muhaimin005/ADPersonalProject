@@ -11,7 +11,7 @@ namespace ADTest.Models
 
         public string StudentName { get; set; }
 
-        [ForeignKey("AcademicProgram")]  
+        [ForeignKey("AcademicProgram")]
         public string ProgramId { get; set; }
         public virtual AcademicProgram AcademicProgram { get; set; }
 
@@ -25,5 +25,11 @@ namespace ADTest.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         public string applicationStatus { get; set; }
+
+        public int semester {  get; set; }
+
+        public string academicSession {  get; set; }
+
+        public virtual  Proposal proposal { get; set; }
     }
 }

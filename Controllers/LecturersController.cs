@@ -312,5 +312,70 @@ namespace ADTest.Controllers
         {
             return await _userManager.Users.SingleOrDefaultAsync(u => u.IC == lecturerId);
         }
+
+        [Route("MyStudents")]
+        public async Task<IActionResult> MyStudents()
+        {
+            var userId = _userManager.GetUserId(User); // Get the logged-in user's ID
+            var lecturer = await _context.lecturer
+                .Include(l => l.ApplicationUser)
+                .FirstOrDefaultAsync(l => l.ApplicationUser.Id == userId);
+
+            if (lecturer == null)
+            {
+                return NotFound("Lecturer not found for the logged-in user.");
+            }
+
+            var lecturerId = lecturer.LecturerId; // Get the LecturerId
+            var students = await _context.student
+                .Where(s => s.LecturerId == lecturerId)
+                .Include(s => s.lecturer)
+                .ThenInclude(l => l.ApplicationUser)
+                .Include(s => s.proposal) // Include proposals
+                .ToListAsync();
+
+            var model = students.Select(s => new MyStudentViewModel
+            {
+                StudentId = s.StudentId,
+                StudentName = s.StudentName,
+                Semester = s.semester,
+                academicSession = s.academicSession,
+                ProposalId = s.proposal.ProposalId,
+                ProposalStatus = s.proposal.status,
+            }).ToList();
+
+            return View(model);
+        }
+
+        [Route("ViewProposal")]
+        public async Task<IActionResult> ViewProposal(int id)
+        {
+            var proposal = await _context.proposal
+                .Include(p => p.student)
+                .FirstOrDefaultAsync(p => p.ProposalId == id);
+
+            if (proposal == null)
+            {
+                return NotFound();
+            }
+
+            return View(proposal);
+        }
+
+        public async Task<IActionResult> DownloadProposal(int id)
+        {
+            var proposal = await _context.proposal
+                .FirstOrDefaultAsync(p => p.ProposalId == id);
+
+            if (proposal == null || proposal.proposalForm == null)
+            {
+                return NotFound();
+            }
+
+            return File(proposal.proposalForm, "application/octet-stream", "ProposalForm.pdf");
+        }
+
+
+
     }
 }

@@ -32,6 +32,16 @@
                 <select asp-for="ProgramId" class ="form-control" asp-items="ViewBag.ProgramId"></select>
             </div>
             <div class="form-group">
+                <label asp-for="semester" class="control-label"></label>
+                <input asp-for="semester" class="form-control" />
+                <span asp-validation-for="semester" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="academicSession" class="control-label"></label>
+                <input asp-for="academicSession" class="form-control" />
+                <span asp-validation-for="academicSession" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

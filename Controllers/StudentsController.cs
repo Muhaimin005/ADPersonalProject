@@ -119,7 +119,9 @@ namespace ADTest.Controllers
                 StudentPhone = student.ApplicationUser.PhoneNumber,
                 ProgramName = student.AcademicProgram?.ProgramName ?? "No Program Assigned",
                 LecturerName = student.LecturerId != null ? student.lecturer.LecturerName : "No supervisor registered",
-                ApplicationStatus = student.applicationStatus
+                ApplicationStatus = student.applicationStatus,
+                semester = student.semester,
+                academicSession = student.academicSession
             };
 
             return View(model);
@@ -171,7 +173,9 @@ namespace ADTest.Controllers
                     ApplicationUserId = user.Id,
                     LecturerId = null,
                     ProgramId = input.ProgramId,
-                    applicationStatus = "No Supervisor Application recorded"
+                    applicationStatus = "No Supervisor Application recorded",
+                    semester = input.semester,
+                    academicSession = input.academicSession
 
                 };
 

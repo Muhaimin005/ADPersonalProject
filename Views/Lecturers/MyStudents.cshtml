@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ADTest.Models.ViewModel.MyStudentViewModel>
+
+@{
+    ViewData["Title"] = "My Students";
+}
+
+<h1>My Students</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Semester</th>
+            <th>Academic Session</th>
+            <th>Proposal status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StudentId</td>
+                <td>@student.StudentName</td>
+                <td>@student.Semester</td>
+                <td>@student.academicSession</td>
+                <td>@student.ProposalStatus</td>
+                <td>
+                    @if (student.ProposalId.HasValue)
+                    {
+                        <a asp-action="ViewProposal" asp-route-id="@student.ProposalId" class="btn btn-secondary">View Proposal</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

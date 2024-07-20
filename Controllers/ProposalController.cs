@@ -39,10 +39,13 @@ namespace ADTest.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var userId = user.IC;
+            var student = await _context.student.FirstOrDefaultAsync(s => s.StudentId == userId);
 
             ProposalInputModel proposal = new ProposalInputModel()
             {
                 StudentId = userId,
+                semester = student.semester,
+                session = student.academicSession
             };
 
             return View(proposal);

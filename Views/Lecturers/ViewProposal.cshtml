@@ -1,0 +1,20 @@
+﻿@model ADTest.Models.Proposal
+
+@{
+    ViewData["Title"] = "Proposal Details";
+}
+
+<h1>Proposal Details</h1>
+
+<div>
+    <h2>@Model.title</h2>
+    <p><strong>Type:</strong> @Model.type</p>
+    <p><strong>Status:</strong> @Model.status</p>
+    <p><strong>Semester:</strong> @Model.semester</p>
+    <p><strong>Session:</strong> @Model.session</p>
+    <p><strong>Student:</strong> @Model.student.StudentName</p>
+    @if (Model.proposalForm != null && Model.proposalForm.Length > 0)
+    {
+        <a asp-action="DownloadProposal" asp-route-id="@Model.ProposalId" class="btn btn-secondary">Download Proposal Form</a>
+    }
+</div>

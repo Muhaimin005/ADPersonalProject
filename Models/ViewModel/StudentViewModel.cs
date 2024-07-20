@@ -9,6 +9,8 @@
         public string? ProgramName { get; set; }
         public string? LecturerName { get; set; }
         public string? ApplicationStatus { get; set; }
+        public int semester { get; set; }
+        public string academicSession { get; set; }
 
     }
 }

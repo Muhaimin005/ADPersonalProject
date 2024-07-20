@@ -121,8 +121,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Students" asp-action="Details" asp-route-id="@UserManager.GetUserId(User)">Profile</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Students" asp-action="SelectSupervisor" >Supervisor</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Supervisor</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-dark" asp-controller="Students" asp-action="ViewSupervisor">View Supervisor</a>
+                                        <a class="dropdown-item text-dark" asp-controller="Students" asp-action="SelectSupervisor">Select Supervisor</a>
+                                    </div>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Proposal</a>

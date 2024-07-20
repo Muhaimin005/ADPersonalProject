@@ -25,7 +25,7 @@
                     <td>@Html.DisplayFor(modelItem => item.FieldofStudy)</td>
                     <td>@Html.DisplayFor(modelItem => item.Domain)</td>
                     <td>
-                        <button type="button" class="btn btn-primary" onclick="confirmApplication('@item.LecturerName', '@item.lecturerId')">Apply</button>
+                        <a href="\assets\FYP Agreement.pdf" class="btn btn-primary" download>Download Agreement Form</a>
                     </td>
                 </tr>
             }
@@ -38,16 +38,6 @@
 }
 else
 {
-    <h2>You already have a supevisor assigned</h2>
+    <h2>You don't have a supevisor assigned</h2>
+    <a class="btn btn-primary" asp-controller="Students" asp-action="SelectSupervisor">Apply Supervisor</a>
 }
-
-
-
-<script>
-    function confirmApplication(lecturerName, lecturerId) {
-        if (confirm('Are you sure you want to apply to ' + lecturerName + '?')) {
-            document.getElementById('lecturerId').value = lecturerId;
-            document.getElementById('applyForm').submit();
-        }
-    }
-</script>

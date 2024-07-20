@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ADTest.Controllers
 {
@@ -36,6 +37,11 @@ namespace ADTest.Controllers
         public async Task<IActionResult> Index()
         {
             await InitializeAdmin();
+            var result = await StudentCheck();
+            if (result != null)
+            {
+                return result;
+            }
 
             return View();
         }
@@ -71,6 +77,28 @@ namespace ADTest.Controllers
             {
                 await _userManager.AddToRoleAsync(admin, "Admin");
             }
+        }
+
+        public async Task<IActionResult> StudentCheck()
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                var roles = _userManager.GetRolesAsync(await _userManager.GetUserAsync(User)).Result;
+
+                if (roles.Contains("Student"))
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    var userId = user.IC;
+                    var student = await _context.student.FirstOrDefaultAsync(s => s.StudentId == userId);
+
+                    if (student == null)
+                    {
+                        return RedirectToAction("Create", "Students");
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

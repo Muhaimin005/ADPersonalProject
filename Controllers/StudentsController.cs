@@ -31,21 +31,43 @@ namespace ADTest.Controllers
         // GET: Students
         public async Task<IActionResult> SelectSupervisor()
         {
-            var lecturers = await _context.lecturer.Include(t=> t.ApplicationUser).ToListAsync();
-
-            var model = lecturers.Select(t => new LecturerViewModel
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
             {
-                lecturerId = t.LecturerId,
-                LecturerName = t.ApplicationUser.Name,
-                email = t.ApplicationUser.Email,
-                PhoneNumber = t.ApplicationUser.PhoneNumber,
-                LecturerAddress = t.LecturerAddress,
-                FieldofStudy = t.FieldofStudy,
-                Domain = t.domain,
-                IsCommittee = t.isCommittee,
-            }).ToList();
+                return NotFound();
+            }
 
-            return View(model);
+            var student = await _context.student
+                .FirstOrDefaultAsync(s => s.ApplicationUserId == user.Id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            if (student.LecturerId == null)
+            {
+                var lecturers = await _context.lecturer.Include(t=> t.ApplicationUser).ToListAsync();
+
+                var model = lecturers.Select(t => new LecturerViewModel
+                {
+                    lecturerId = t.LecturerId,
+                    LecturerName = t.ApplicationUser.Name,
+                    email = t.ApplicationUser.Email,
+                    PhoneNumber = t.ApplicationUser.PhoneNumber,
+                    LecturerAddress = t.LecturerAddress,
+                    FieldofStudy = t.FieldofStudy,
+                    Domain = t.domain,
+                    IsCommittee = t.isCommittee,
+                }).ToList();
+
+                return View(model);
+            }
+            else
+            {
+                return View();
+            }
+            
         }
 
         [HttpPost]

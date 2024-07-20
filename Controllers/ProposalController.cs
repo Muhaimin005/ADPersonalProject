@@ -38,7 +38,7 @@ namespace ADTest.Controllers
         public async Task<IActionResult> SubmitProposal()
         {
             var user = await _userManager.GetUserAsync(User);
-            var userId = user.Id;
+            var userId = user.IC;
 
             ProposalInputModel proposal = new ProposalInputModel()
             {

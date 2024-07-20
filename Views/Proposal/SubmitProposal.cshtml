@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="SubmitProposal">
+        <form asp-action="SubmitProposal" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="StudentId" class="form-control" hidden aria-required="true" />
             <div class="form-floating mb-3">
@@ -36,7 +36,7 @@
                 <label asp-for="session">Session</label>
                 <span asp-validation-for="session" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3">
+            <div>
                 <a href="/assets/PSM1.PF_.05.docx" class="btn btn-primary" download>Download Proposal Form</a>
             </div>
             <div class="form-floating mb-3">

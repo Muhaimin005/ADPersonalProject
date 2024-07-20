@@ -1,84 +1,71 @@
 ﻿@model List<Proposal>
 
 @{
-	ViewData["Title"] = "View Proposal";
+    ViewData["Title"] = "View Proposal";
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+<h4>Proposal</h4>
+
+<form method="get" asp-action="ProposalList" class="row g-3 mb-3">
+    <div class="col-md-4">
+        <label for="semester" class="form-label">Semester</label>
+        <input type="number" id="semester" name="semester" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label for="session" class="form-label">Session</label>
+        <input type="text" id="session" name="session" class="form-control" />
+    </div>
+    <div class="col-md-4 align-self-end">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form>
+
 <table class="table table-bordered table-striped">
-	<h4>Proposal</h4>
-	<thead>
+    <thead>
         <tr>
-            <th>
-                Student ID
-            </th>
-            <th>
-                Student Name
-            </th>
-			<th>
-				Title
-			</th>
-			<th>
-				Type
-			</th>
-			<th>
-				Evaluator 1
-            </th>
-            <th>
-                Evaluator 2
-            </th>
-			<th>
-				Status
-			</th>
-			<th>
-				Action
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var obj in @Model)
-		{
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Evaluator 1</th>
+            <th>Evaluator 2</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
             <tr>
+                <td>@obj.StudentId</td>
+                <td>@obj.student.StudentName</td>
+                <td>@obj.title</td>
+                <td>@obj.type</td>
                 <td>
-                    @obj.StudentId
-                </td>
-                <td>
-                    @obj.student.StudentName
-                </td>
-				<td>
-					@obj.title
-				</td>
-				<td>
-					@obj.type
-				</td>
-				<td>
-					@if (obj.LecturerId1 == null)
-					{
-						<a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
-					}
-					else
-					{
-						@obj.lecturer1.LecturerName
-					}
+                    @if (obj.LecturerId1 == null)
+                    {
+                        <a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
+                    }
+                    else
+                    {
+                        @obj.lecturer1.LecturerName
+                    }
                 </td>
                 <td>
                     @if (obj.LecturerId2 == null)
                     {
-						<a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
+                        <a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
                     }
                     else
                     {
                         @obj.lecturer2.LecturerName
                     }
                 </td>
-				<td>
-					@obj.status
-				</td>
-				<td>
-					<a asp-action="ViewProposalForm" asp-route-id="@obj.ProposalId">View Form</a>
-				</td>
-			</tr>
-		}
-	</tbody>
+                <td>@obj.status</td>
+                <td><a asp-action="ViewProposalForm" asp-route-id="@obj.ProposalId">View Form</a></td>
+            </tr>
+        }
+    </tbody>
 </table>

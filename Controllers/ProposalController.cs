@@ -105,19 +105,30 @@ namespace ADTest.Controllers
 
             return View(proposal);
 		}
-		// STUDENT SIDE - END //
+        // STUDENT SIDE - END //
 
-		// COMMITTEE SIDE - START //
-		public async Task<IActionResult> ProposalList()
+        // COMMITTEE SIDE - START //
+        public async Task<IActionResult> ProposalList(int? semester, string session)
         {
-			var proposalList = await _context.proposal
-									 .Include(p => p.student)
-									 .Include(p => p.lecturer1)
-									 .Include(p => p.lecturer2)
-									 .ToListAsync();
+            var proposals = _context.proposal
+                                    .Include(p => p.student)
+                                    .Include(p => p.lecturer1)
+                                    .Include(p => p.lecturer2)
+                                    .AsQueryable();
 
-			return View(proposalList);
-		}
+            if (semester.HasValue)
+            {
+                proposals = proposals.Where(p => p.semester == semester.Value);
+            }
+
+            if (!string.IsNullOrEmpty(session))
+            {
+                proposals = proposals.Where(p => p.session == session);
+            }
+
+            var proposalList = await proposals.ToListAsync();
+            return View(proposalList);
+        }
         // COMMITTEE SIDE - END //
 
         // SUPERVISOR SIDE - START //

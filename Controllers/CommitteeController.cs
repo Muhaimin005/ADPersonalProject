@@ -397,7 +397,7 @@ namespace ADTest.Controllers
             _context.proposal.Update(proposal);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ProposalsWithoutEvaluators");
+            return RedirectToAction("ProposalList", "Proposal");
         }
 
         [HttpPost]

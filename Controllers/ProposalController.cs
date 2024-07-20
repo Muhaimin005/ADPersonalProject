@@ -110,12 +110,14 @@ namespace ADTest.Controllers
 		// COMMITTEE SIDE - START //
 		public async Task<IActionResult> ProposalList()
         {
-            var proposalList = await _context.proposal
-                                     .Include(p => p.student)
-                                     .ToListAsync();
+			var proposalList = await _context.proposal
+									 .Include(p => p.student)
+									 .Include(p => p.lecturer1)
+									 .Include(p => p.lecturer2)
+									 .ToListAsync();
 
-            return View(proposalList);
-        }
+			return View(proposalList);
+		}
         // COMMITTEE SIDE - END //
 
         // SUPERVISOR SIDE - START //

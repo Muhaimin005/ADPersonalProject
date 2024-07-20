@@ -17,10 +17,10 @@
                 Student Name
             </th>
 			<th>
-				Proposal Title
+				Title
 			</th>
 			<th>
-				Proposal Type
+				Type
 			</th>
 			<th>
 				Evaluator 1
@@ -53,8 +53,25 @@
 					@obj.type
 				</td>
 				<td>
-					
-				</td>
+					@if (obj.LecturerId1 == null)
+					{
+						<a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
+					}
+					else
+					{
+						@obj.lecturer1.LecturerName
+					}
+                </td>
+                <td>
+                    @if (obj.LecturerId2 == null)
+                    {
+						<a class="btn btn-primary" asp-controller="Committee" asp-action="AssignEvaluators" asp-route-id="@obj.ProposalId">Assign Evaluators</a>
+                    }
+                    else
+                    {
+                        @obj.lecturer2.LecturerName
+                    }
+                </td>
 				<td>
 					@obj.status
 				</td>

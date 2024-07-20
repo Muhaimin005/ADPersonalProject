@@ -1,0 +1,10 @@
+﻿@model Proposal
+
+@{
+    ViewData["Title"] = "View Proposal Form";
+}
+
+<h2>@Model.title</h2>
+<div class="text-center">
+    <iframe src="data:application/pdf;base64,@ViewBag.PdfData" width="100%" height="600"></iframe>
+</div>

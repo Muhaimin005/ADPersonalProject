@@ -92,6 +92,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Lecturers" asp-action="MyStudents">MyStudent</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Committee" asp-action="ProposalList">Proposal</a>
+                                </li>
                             </ul>
                             <partial name="_LoginPartial" />
                         </div>
@@ -118,11 +121,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Students" asp-action="SelectSupervisor" >Supervisor</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Proposal" asp-action="SubmitProposal">Proposal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Proposal</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-dark" asp-controller="Proposal" asp-action="SubmitProposal">Submit Proposal</a>
+                                        <a class="dropdown-item text-dark" asp-controller="Proposal" asp-action="ViewProposal">View Proposal</a>
+                                    </div>
                                 </li>
                             </ul>
                             <partial name="_LoginPartial" />

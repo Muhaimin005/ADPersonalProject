@@ -219,7 +219,8 @@ namespace ADTest.Migrations
 
                     b.HasIndex("LecturerId2");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.ToTable("proposal");
                 });
@@ -244,9 +245,16 @@ namespace ADTest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("academicSession")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("applicationStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("semester")
+                        .HasColumnType("int");
 
                     b.HasKey("StudentId");
 
@@ -288,25 +296,25 @@ namespace ADTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "68cdb623-359c-454c-b9c3-04f1c71a4a33",
+                            Id = "2f431968-f804-40a2-9173-42b71b2c682a",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "39f2cfc3-d31c-4345-bd55-8ce2b8a62bac",
+                            Id = "3a750479-3d30-4dde-9429-e33db8c89fda",
                             Name = "Student",
                             NormalizedName = "Student"
                         },
                         new
                         {
-                            Id = "b69646dd-e06a-4cfb-8fae-93827054a13f",
+                            Id = "baae3c6d-1c4d-46a9-8f87-bfa9e1302f29",
                             Name = "Lecturer",
                             NormalizedName = "Lecturer"
                         },
                         new
                         {
-                            Id = "3f0f83d6-cf92-4c0b-a4f4-453fdbda530c",
+                            Id = "a84ccc75-c588-40e1-99cf-3a5115b5f3a2",
                             Name = "Committee",
                             NormalizedName = "Committee"
                         });
@@ -461,8 +469,8 @@ namespace ADTest.Migrations
                         .HasForeignKey("LecturerId2");
 
                     b.HasOne("ADTest.Models.Student", "student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
+                        .WithOne("proposal")
+                        .HasForeignKey("ADTest.Models.Proposal", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -546,6 +554,12 @@ namespace ADTest.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ADTest.Models.Student", b =>
+                {
+                    b.Navigation("proposal")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

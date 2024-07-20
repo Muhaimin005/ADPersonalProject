@@ -1,0 +1,56 @@
+﻿@model List<Proposal>
+
+@{
+	ViewData["Title"] = "View Proposal";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<table class="table table-bordered table-striped">
+	<h4>Proposal</h4>
+	<thead>
+		<tr>
+			<th>
+				Proposal Title
+			</th>
+			<th>
+				Proposal Type
+			</th>
+			<th>
+				Evaluator
+            </th>
+            <th>
+                Status
+            </th>
+			<th>
+				Action
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var obj in @Model)
+		{
+			<tr>
+				<td>
+					@obj.title
+				</td>
+				<td>
+					@obj.type
+				</td>
+				<td>
+					@if (obj.LecturerId1 != null && obj.LecturerId2 != null)
+					{
+						@obj.LecturerId1
+						@obj.LecturerId2
+					}
+                </td>
+                <td>
+                    @obj.status
+                </td>
+				<td>
+					<a asp-action="ViewProposalForm" asp-route-id="@obj.ProposalId">View Form</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

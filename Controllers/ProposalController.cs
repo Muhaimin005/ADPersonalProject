@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using ADTest.Data;
 using ADTest.Models;
 using ADTest.Models.ViewModel;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace ADTest.Controllers
 {
@@ -53,7 +54,7 @@ namespace ADTest.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SUbmitProposal(ProposalInputModel Input)
+        public async Task<IActionResult> SubmitProposal(ProposalInputModel Input)
         {
             if (ModelState.IsValid)
             {
@@ -82,9 +83,39 @@ namespace ADTest.Controllers
             }
             return View(Input);
         }
-        // STUDENT SIDE - END //
 
-        // COMMITTEE SIDE - START //
+        public async Task<IActionResult> ViewProposal()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user.IC;
+
+            var proposal = await _context.proposal
+                .Where(p => p.StudentId == userId)
+                .ToListAsync();
+
+            return View(proposal);
+        }
+
+		public IActionResult ViewProposalForm(int id)
+		{
+            var proposal = _context.proposal.FirstOrDefault(p => p.ProposalId == id);
+
+            var base64Pdf = Convert.ToBase64String(proposal.proposalForm);
+            ViewBag.PdfData = base64Pdf;
+
+            return View(proposal);
+		}
+		// STUDENT SIDE - END //
+
+		// COMMITTEE SIDE - START //
+		public async Task<IActionResult> ProposalList()
+        {
+            var proposalList = await _context.proposal
+                                     .Include(p => p.student)
+                                     .ToListAsync();
+
+            return View(proposalList);
+        }
         // COMMITTEE SIDE - END //
 
         // SUPERVISOR SIDE - START //

@@ -230,7 +230,9 @@ namespace ADTest.Migrations
                     ProgramId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    applicationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    applicationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    semester = table.Column<int>(type: "int", nullable: false),
+                    academicSession = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -265,7 +267,10 @@ namespace ADTest.Migrations
                     type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LecturerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LecturerId2 = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    semester = table.Column<int>(type: "int", nullable: false),
+                    session = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    proposalForm = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -293,10 +298,10 @@ namespace ADTest.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "111a06fc-b419-434d-83e9-03a0ef2de792", null, "Committee", "Committee" },
-                    { "1db1f287-ea00-4e53-a877-59f56185586c", null, "Lecturer", "Lecturer" },
-                    { "24962f0b-e000-4d57-b705-33a9d458b51f", null, "Admin", "Admin" },
-                    { "963c00fe-1296-4c32-bcb0-3072960bac45", null, "Student", "Student" }
+                    { "2f431968-f804-40a2-9173-42b71b2c682a", null, "Admin", "Admin" },
+                    { "3a750479-3d30-4dde-9429-e33db8c89fda", null, "Student", "Student" },
+                    { "a84ccc75-c588-40e1-99cf-3a5115b5f3a2", null, "Committee", "Committee" },
+                    { "baae3c6d-1c4d-46a9-8f87-bfa9e1302f29", null, "Lecturer", "Lecturer" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -366,7 +371,8 @@ namespace ADTest.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_proposal_StudentId",
                 table: "proposal",
-                column: "StudentId");
+                column: "StudentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_student_ApplicationUserId",
